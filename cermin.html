@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>cermin</title>
+    <style>
+        .rotate {
+            font-size: 30px;
+            -webkit-transform: rotateX(180deg);
+            transform: rotateY(180deg);
+            width: 60%;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            border: 5px solid pink;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="app">
+        <div class="container">
+
+            <canvas class="rotate" ref="webcam" width="640" height="480"></canvas>
+            <!-- <button @click="capture">Capture a</button>
+            <br> ini canvas nya
+            <canvas ref="canvas" width="640" height="480"></canvas>
+            <br>
+            <br>
+            <br>
+            <button @click="coba">coba</button> -->
+        </div>
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+    <script>
+        const app = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    stream: null,
+                    imgData: "",
+                    isListening: false,
+                    recognition: null,
+                }
+            },
+            created() {
+                // mendapatkan akses ke webcam
+                navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+                    // mendapatkan context canvas
+                    const canvas = this.$refs.webcam;
+                    const context = canvas.getContext('2d');
+
+                    // membuat objek video
+                    const video = document.createElement('video');
+                    video.srcObject = stream;
+                    video.play();
+
+                    // menggambar video ke canvas
+                    video.addEventListener('play', () => {
+                        const draw = () => {
+                            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                            requestAnimationFrame(draw);
+                        };
+                        draw();
+                    });
+                });
+            },
+            methods: {
+
+                capture() {
+                    alert("aaaaa");
+                    const canvas = this.$refs.canvas;
+                    const webcam = this.$refs.webcam;
+                    const ctx = canvas.getContext("2d");
+                    canvas.width = webcam.videoWidth;
+                    canvas.height = webcam.videoHeight;
+                    ctx.drawImage(webcam, 0, 0, canvas.width, canvas.height);
+                },
+
+
+                // coba() {
+                //     alert("aaaaa");
+                // },
+                coba() {
+                    alert("aaaaaaaa");
+                    navigator.mediaDevices.getUserMedia({ video: true })
+                        .then(stream => {
+                            this.$refs.webcam = stream;
+                            this.$refs.webcam.play();
+                        });
+
+                    const canvas = this.$refs.photo;
+                    const video = this.$refs.webcam;
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    canvas.getContext('2d').drawImage(video, 0, 0);
+
+                    // displaying the image on canvas
+                    const data = canvas.toDataURL('image/png');
+                    const img = new Image();
+                    img.src = data;
+                    canvas.appendChild(img);
+                },
+
+                takePicture() {
+                    // mendapatkan context canvas
+                    const canvas = this.$refs.webcam;
+                    const context = canvas.getContext('2d');
+
+                    // mengambil gambar dari canvas
+                    const image = canvas.toDataURL();
+                    // Anda dapat menyimpan variabel image di dalam data komponen Anda
+                    // atau menggunakannya langsung di dalam fungsi savePicture
+                },
+                savePicture() {
+                    // menyimpan gambar ke local storage
+                    localStorage.setItem('image', image);
+                },
+
+                startListening() {
+                    this.isListening = true;
+                    this.recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                    this.recognition.onresult = (event) => {
+                        const transcript = event.results[0][0].transcript;
+                        if (transcript.toLowerCase() === "capture") {
+                            this.capture();
+                        }
+                    }
+                    this.recognition.start();
+                },
+                stopListening() {
+                    this.isListening = false;
+                    this.recognition.stop();
+                },
+                // capture() {
+                //     // Get a reference to the video element
+                //     const video = this.$refs.webcam;
+                //     // Create a new canvas
+                //     const canvas = document.createElement("canvas");
+                //     // Get the video dimensions
+                //     canvas.width = video.videoWidth;
+                //     canvas.height = video.videoHeight;
+                //     // Get the canvas context
+                //     const context = canvas.getContext("2d");
+                //     // Draw the video on the canvas
+                //     context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                //     // Save the image as a data URL
+                //     this.imgData = canvas.toDataURL();
+                // },
+                saveTemporary() {
+                    localStorage.setItem("webcam_image", this.imgData);
+                }
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>
