@@ -47,7 +47,7 @@
           <button class="btn btn-xs btn-success">cermin</button>
         </a>
       </div>
-      <!-- {{todayTasks}} -->
+      {{archivedTasks}}
       <!-- <h1 class="text-center text-danger mb-3">To Do List 2023 Dev</h1> -->
       <!-- form untuk menambah tugas baru -->
       <!-- form untuk menambah tugas baru -->
@@ -578,18 +578,24 @@
           checkDate() {},
         },
         mounted() {
-          const tasks = this.tasks;
+          const tasks = this.archivedTasks;
           const today = new Date();
           const todayDay = today.getDate();
           const todayTasks = [];
           console.log(tasks);
-          for (let i = 0; i < tasks.length; i++) {
-            if (tasks[i].bulanan) {
-              const taskDate = new Date(tasks[i].deadline);
-              const taskDay = taskDate.getDate();
+          if (todayDay >= 15) {
+            alert("oke cek");
+            for (let i = 0; i < tasks.length; i++) {
+              if (tasks[i].bulanan) {
+                const taskDate = new Date(tasks[i].deadline);
+                const taskDay = taskDate.getDate();
 
-              if (taskDay === todayDay) {
-                todayTasks.push(tasks[i]);
+                if (taskDay === todayDay) {
+                  tasks[i].completed = false;
+                  tasks[i].completedDate = "";
+                  this.tasks.push(tasks[i]);
+                  this.archivedTasks.splice(tasks[i], 1);
+                }
               }
             }
           }
