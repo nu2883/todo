@@ -47,7 +47,7 @@
           <button class="btn btn-xs btn-success">cermin</button>
         </a>
       </div>
-      <!-- {{tasks}} -->
+      <!-- {{todayTasks}} -->
       <!-- <h1 class="text-center text-danger mb-3">To Do List 2023 Dev</h1> -->
       <!-- form untuk menambah tugas baru -->
       <!-- form untuk menambah tugas baru -->
@@ -402,6 +402,7 @@
           sortOrder: "asc",
           showTasks: true,
           allCompleted: false,
+          todayTasks: [],
         },
         methods: {
           addTask() {
@@ -574,8 +575,30 @@
             this.tasks.forEach((task) => (task.completed = this.allCompleted));
             this.updateLocalStorage();
           },
+          checkDate() {},
+        },
+        mounted() {
+          const tasks = this.tasks;
+          const today = new Date();
+          const todayDay = today.getDate();
+          const todayTasks = [];
+          console.log(tasks);
+          for (let i = 0; i < tasks.length; i++) {
+            if (tasks[i].bulanan) {
+              const taskDate = new Date(tasks[i].deadline);
+              const taskDay = taskDate.getDate();
+
+              if (taskDay === todayDay) {
+                todayTasks.push(tasks[i]);
+              }
+            }
+          }
+
+          this.todayTasks = todayTasks;
         },
         created() {
+          this.checkDate();
+
           // cek apakah ada daftar tugas di Local Storage
           if (localStorage.getItem("tasks")) {
             // jika ada, ambil daftar tugas dari Local Storage
