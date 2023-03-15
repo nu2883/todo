@@ -1,407 +1,594 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>To-Do List</title>
+    <!-- tambahkan Bootstrap 5 -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+    />
+    <style>
+      /* ... */
 
-<head>
-  <meta charset="UTF-8" />
-  <title>To-Do List</title>
-  <!-- tambahkan Bootstrap 5 -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" />
-  <style>
-    /* ... */
+      .pink {
+        background-color: pink;
+      }
 
-    .pink {
-      background-color: pink;
-    }
+      .orange {
+        background-color: orange;
+      }
 
-    .orange {
-      background-color: orange;
-    }
+      .salmon {
+        background-color: yellow;
+      }
+    </style>
 
-    .salmon {
-      background-color: yellow;
-    }
-  </style>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+    <script src="https://unpkg.com/vuedraggable@2.23.2/dist/vuedraggable.umd.min.js"></script>
+  </head>
 
-  <script src="https://unpkg.com/vuedraggable@2.23.2/dist/vuedraggable.umd.min.js"></script>
-</head>
+  <body style="background-color: violet">
+    <div
+      id="app"
+      class="container"
+      style="height: 800px; background-color: #81d4fa"
+    >
+      <h1 class="text-center mb-3">To Do List 2023</h1>
+      <div class="text-center">
+        <a href="/todo/cermin.html" target="_blank">
+          <button class="btn btn-xs btn-success">cermin</button>
+        </a>
+      </div>
+      <!-- {{tasks}} -->
+      <!-- <h1 class="text-center text-danger mb-3">To Do List 2023 Dev</h1> -->
+      <!-- form untuk menambah tugas baru -->
+      <!-- form untuk menambah tugas baru -->
+      <div class="row mb-2 mt-2">
+        <div class="col-8">
+          <form v-if="!isEditing" @submit.prevent="addTask">
+            <div class="input-group">
+              <input
+                class="form-control"
+                type="text"
+                v-model="newTask.title"
+                placeholder="Tambahkan tugas baru"
+                ref="newTaskTitle"
+                @blur="showDatepicker"
+              />
+              <input
+                class="form-control"
+                type="date"
+                v-model="newTask.deadline"
+                ref="newTaskDeadline"
+              />
 
-<body>
-  <div id="app" class="container">
-    <h1 class="text-center">To Do List 2023</h1>
-                <div class="text-center">
-                <a href="/todo/cermin.html" target="_blank">
-                          <button class="btn btn-xs btn-success">cermin</button>
-                </a>
+              <button class="btn btn-primary" type="submit">Simpan</button>
             </div>
-    <!-- {{tasks}} -->
-    <!-- <h1 class="text-center text-danger mb-3">To Do List 2023 Dev</h1> -->
-    <!-- form untuk menambah tugas baru -->
-    <!-- form untuk menambah tugas baru -->
-    <div class="row">
-      <div class="col-8">
-        <form v-if="!isEditing" @submit.prevent="addTask">
-          <input type="text" v-model="newTask.title" placeholder="Tambahkan tugas baru" ref="newTaskTitle" @blur="showDatepicker" />
-          <input type="date" v-model="newTask.deadline" ref="newTaskDeadline" />
-          <button type="submit">Tambah</button>
-        </form>
-      </div>
-      <div class="col-4 d-flex justify-content-end">
-        <button v-if="!showTasks" @click="showTasks = !showTasks">
-          Tampilkan Tugas
-        </button>
-        <button v-else @click="showTasks = !showTasks">
-          Tampilkan Arsip
-        </button>
-      </div>
-    </div>
+            {{newTask.bulanan}} {{tasks}}
+            <div class="form-check" v-if="newTask.deadline.length > 0">
+              <input
+                v-model="newTask.bulanan"
+                class="form-check-input"
+                type="checkbox"
+                value="true"
+                id="flexCheckDefault"
+              />
+              <label class="form-check-label" for="flexCheckDefault">
+                apakah task bulanan ???
+              </label>
+            </div>
 
-    <form v-if="isEditing" @submit.prevent="updateTask">
-      <input type="text" v-model="editingTask.title" placeholder="Ubah judul tugas" />
-      <input type="date" v-model="editingTask.deadline" />
-      <button type="submit">Simpan</button>
-      <button @click="cancelEdit">Batal</button>
-    </form>
-
-    <!-- menampilkan daftar tugas -->
-    <table class="table table-bordered" v-if="showTasks">
-      <thead>
-        <tr>
-          <th class="font-weight-bold text-center" scope="col" style="width: 5%">
-            <input type="checkbox" v-model="allCompleted" @change="toggleAllCompleted" />
-          </th>
-          <th class="font-weight-bold text-center" scope="col" style="width: 60%">
-            Tugas
-          </th>
-          <th class="font-weight-bold text-center" style="cursor: pointer; width: 15%" scope="col" @click="sortByDeadline">
-            Deadline
-          </th>
-          <th class="font-weight-bold text-center" scope="col" style="width: 15%">
-            Aksi
-            <button v-if="tasks.filter(task => task.completed).length > 1" @click="archiveCompletedTasks">
-              Arsipkan Semua
-            </button>
-          </th>
-          <th class="font-weight-bold text-center" scope="col" style="width: 10%">
-            #
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(task, index) in tasks" :key="index" :class="{ pink: isToday(task.deadline), orange: isTomorrow(task.deadline), salmon: isTwoDaysLater(task.deadline) }">
-          <td class="text-center">
-            <input type="checkbox" v-model="task.completed" @change="updateLocalStorage" class="form-check-input" />
-          </td>
-          <td :class="{ 'text-decoration-line-through': task.completed }">
-            {{ task.title }}
-          </td>
-          <td class="text-center">
-            <span :class="{ 'text-decoration-line-through ': task.completed }">
-              {{ task.deadline }}
-            </span>
-            <br />
-            <span v-if="task.completedDate">
-              selesai :
-              <input type="text" v-model="task.completedDate">
-
-            </span>
-          </td>
-          <td class="text-center">
-            <button v-if="!task.completed" @click="editTask(task)">
-              Edit
-            </button>
-            <button v-if="!task.completed" @click="removeTask(index)">
-              Hapus
-            </button>
-            <button v-if="task.completed" @click="archiveTask(index)">
-              Arsipkan
-            </button>
-          </td>
-          <td>
-            <button @click="moveTaskUp(index)">▲</button>
-            <button @click="moveTaskDown(index)">▼</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- Tabel daftar tugas yang sudah diarsipkan -->
-    <table class="table table-bordered" v-if="!showTasks">
-      <thead>
-        <tr>
-          <th class="font-weight-bold text-center" scope="col" style="width: 5%">
             <!-- <input
+              type="text"
+              v-model="newTask.title"
+              placeholder="Tambahkan tugas baru"
+              ref="newTaskTitle"
+              @blur="showDatepicker"
+            />
+            <input
+              type="date"
+              v-model="newTask.deadline"
+              ref="newTaskDeadline"
+            />
+            <div
+              class="btn-group"
+              role="group"
+              aria-label="Basic outlined example"
+            >
+              <button type="submit" class="btn btn-primary">Simpan</button>
+            </div> -->
+
+            <!-- <button type="submit">Tambah</button> -->
+          </form>
+          <form class="" v-if="isEditing" @submit.prevent="updateTask">
+            <div class="input-group">
+              <span class="input-group-text">Nama Task | deadline</span>
+              <input
+                v-model="editingTask.title"
+                type="text"
+                aria-label="First name"
+                class="form-control"
+              />
+              <input
+                v-model="editingTask.deadline"
+                type="date"
+                aria-label="Last name"
+                class="form-control"
+              />
+              <button class="btn btn-primary" type="submit">Simpan</button>
+              <button class="btn btn-danger" @click="cancelEdit" type="button">
+                Cancel
+              </button>
+            </div>
+
+            <!-- <div class="input-group mb-2">
+              <span class="input-group-text">Nama Task | deadline</span>
+              <input
+                v-model="editingTask.title"
+                type="text"
+                aria-label="First name"
+                class="form-control"
+              />
+              <input
+                v-model="editingTask.deadline"
+                type="date"
+                aria-label="Last name"
+                class="form-control"
+              />
+            </div> -->
+
+            <!-- <input
+              type="text"
+              v-model="editingTask.title"
+              placeholder="Ubah judul tugas"
+            /> -->
+            <!-- <input type="date" v-model="editingTask.deadline" /> -->
+            <!-- <div
+              class="btn-group"
+              role="group"
+              aria-label="Basic outlined example"
+            >
+              <button type="submit" class="btn btn-primary">Simpan</button>
+
+              <button @click="cancelEdit" type="button" class="btn btn-danger">
+                Batal
+              </button>
+            </div> -->
+            <!-- <button type="submit">Simpan</button>
+            <button @click="cancelEdit">Batal</button> -->
+          </form>
+        </div>
+        <div class="col-4 d-flex justify-content-end">
+          <button v-if="!showTasks" @click="showTasks = !showTasks">
+            Tampilkan Tugas
+          </button>
+          <button v-else @click="showTasks = !showTasks">
+            Tampilkan Arsip
+          </button>
+        </div>
+      </div>
+
+      <!-- menampilkan daftar tugas -->
+      <table class="table table-bordered" v-if="showTasks">
+        <thead>
+          <tr>
+            <th
+              class="font-weight-bold text-center"
+              scope="col"
+              style="width: 5%"
+            >
+              <input
+                type="checkbox"
+                v-model="allCompleted"
+                @change="toggleAllCompleted"
+              />
+            </th>
+            <th
+              class="font-weight-bold text-center"
+              scope="col"
+              style="width: 60%"
+            >
+              Tugas
+            </th>
+            <th
+              class="font-weight-bold text-center"
+              style="cursor: pointer; width: 15%"
+              scope="col"
+              @click="sortByDeadline"
+            >
+              Deadline
+            </th>
+            <th
+              class="font-weight-bold text-center"
+              scope="col"
+              style="width: 15%"
+            >
+              Aksi
+              <button
+                v-if="tasks.filter(task => task.completed).length > 1"
+                @click="archiveCompletedTasks"
+              >
+                Arsipkan Semua
+              </button>
+            </th>
+            <th
+              class="font-weight-bold text-center"
+              scope="col"
+              style="width: 10%"
+            >
+              #
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(task, index) in tasks"
+            :key="index"
+            :class="{ pink: isToday(task.deadline), orange: isTomorrow(task.deadline), salmon: isTwoDaysLater(task.deadline) }"
+          >
+            <td class="text-center">
+              <input
+                type="checkbox"
+                v-model="task.completed"
+                @change="updateLocalStorage"
+                class="form-check-input"
+              />
+            </td>
+            <td :class="{ 'text-decoration-line-through': task.completed }">
+              {{ task.title }}
+            </td>
+            <td class="text-center">
+              <span
+                :class="{ 'text-decoration-line-through ': task.completed }"
+              >
+                {{ task.deadline }}
+              </span>
+              <br />
+              <span v-if="task.completedDate">
+                selesai :
+                <input type="text" v-model="task.completedDate" />
+              </span>
+            </td>
+            <td class="text-center">
+              <button
+                class="btn btn-sm btn-success"
+                v-if="!task.completed"
+                @click="editTask(task)"
+              >
+                Edit
+              </button>
+              <button
+                class="btn btn-sm btn-danger"
+                v-if="!task.completed"
+                @click="removeTask(index)"
+              >
+                Hapus
+              </button>
+              <button v-if="task.completed" @click="archiveTask(index)">
+                Arsipkan
+              </button>
+            </td>
+            <td style="text-size: 5px">
+              <button class="btn btn-sm btn-danger" @click="moveTaskUp(index)">
+                ▲
+              </button>
+              <button
+                class="btn btn-sm btn-success"
+                @click="moveTaskDown(index)"
+              >
+                ▼
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Tabel daftar tugas yang sudah diarsipkan -->
+      <table class="table table-bordered" v-if="!showTasks">
+        <thead>
+          <tr>
+            <th
+              class="font-weight-bold text-center"
+              scope="col"
+              style="width: 5%"
+            >
+              <!-- <input
         type="checkbox"
         v-model="allCompleted"
         @change="toggleAllCompleted"
       /> -->
-            #
-          </th>
-          <th class="font-weight-bold text-center" scope="col" style="width: 60%">
-            Tugas
-          </th>
-          <th class="font-weight-bold text-center" style="cursor: pointer; width: 15%" scope="col" @click="sortByDeadline">
-            Deadline
-          </th>
-          <th class="font-weight-bold text-center" scope="col" style="width: 15%">
-            Aksi
-            <!-- <button
+              #
+            </th>
+            <th
+              class="font-weight-bold text-center"
+              scope="col"
+              style="width: 60%"
+            >
+              Tugas
+            </th>
+            <th
+              class="font-weight-bold text-center"
+              style="cursor: pointer; width: 15%"
+              scope="col"
+              @click="sortByDeadline"
+            >
+              Deadline
+            </th>
+            <th
+              class="font-weight-bold text-center"
+              scope="col"
+              style="width: 15%"
+            >
+              Aksi
+              <!-- <button
         v-if="tasks.filter(task => task.completed).length > 1"
         @click="archiveCompletedTasks"
       >
         Arsipkan Semua
       </button> -->
-          </th>
-          <th class="font-weight-bold text-center" scope="col" style="width: 10%">
-            #
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(task, index) in archivedTasks" :key="index" :class="{ pink: isToday(task.deadline), orange: isTomorrow(task.deadline), salmon: isTwoDaysLater(task.deadline) }">
-          <td>
-            <!-- <input
+            </th>
+            <th
+              class="font-weight-bold text-center"
+              scope="col"
+              style="width: 10%"
+            >
+              #
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(task, index) in archivedTasks"
+            :key="index"
+            :class="{ pink: isToday(task.deadline), orange: isTomorrow(task.deadline), salmon: isTwoDaysLater(task.deadline) }"
+          >
+            <td>
+              <!-- <input
                 type="checkbox"
                 v-model="task.completed"
                 @change="updateLocalStorage"
                 class="form-check-input"
               /> -->
-          </td>
-          <td :class="{ 'text-decoration-line-through': task.completed }">
-            {{ task.title }}
-          </td>
-          <td :class="{ 'text-decoration-line-through': task.completed }">
-            {{ task.deadline }}
-          </td>
-          <td class="text-center">
-            <!-- <button v-if="!task.completed" @click="editTask(task)">Edit</button>
+            </td>
+            <td :class="{ 'text-decoration-line-through': task.completed }">
+              {{ task.title }}
+            </td>
+            <td :class="{ 'text-decoration-line-through': task.completed }">
+              {{ task.deadline }}
+            </td>
+            <td class="text-center">
+              <!-- <button v-if="!task.completed" @click="editTask(task)">Edit</button>
                         <button v-if="!task.completed" @click="removeTask(index)">Hapus</button>
                         <button v-if="task.completed" @click="archiveTask(index)">Arsipkan</button> -->
-            <button @click="activateTask(index)">Aktifkan</button>
-          </td>
-          <td>
-            <!-- <button @click="moveTaskUp(index)">▲</button>
+              <button @click="activateTask(index)">Aktifkan</button>
+            </td>
+            <td>
+              <!-- <button @click="moveTaskUp(index)">▲</button>
               <button @click="moveTaskDown(index)">▼</button> -->
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <!-- <ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- <ul>
             <li v-for="(task, index) in tasks" :key="index">
                 {{ task.title }} (deadline: {{ task.deadline }})
                 <button @click="editTask(task)">Edit</button>
                 <button @click="removeTask(index)">Hapus</button>
             </li>
         </ul> -->
-  </div>
-  <!-- tambahkan Vue.js -->
-  <script>
-    new Vue({
-      el: "#app",
-      data: {
-        tasks: [],
-        archivedTasks: [],
-        newTask: {
-          title: "",
-          deadline: "",
+    </div>
+    <!-- tambahkan Vue.js -->
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          tasks: [],
+          archivedTasks: [],
+          newTask: {
+            title: "",
+            deadline: "",
+            bulanan: false,
+          },
+          isEditing: false,
+          editingTask: {},
+          sortOrder: "asc",
+          showTasks: true,
+          allCompleted: false,
         },
-        isEditing: false,
-        editingTask: {},
-        sortOrder: "asc",
-        showTasks: true,
-        allCompleted: false,
-      },
-      methods: {
-        addTask() {
-          if (this.newTask.title === "") {
-            alert("Tugas tidak boleh kosong");
-          } else {
-            // tambahkan tugas baru ke daftar tugas
-            const id = Date.now();
-            this.tasks.push({ id, ...this.newTask });
-            //   this.tasks.push(this.newTask);
+        methods: {
+          addTask() {
+            if (this.newTask.title === "") {
+              alert("Tugas tidak boleh kosong");
+            } else {
+              // tambahkan tugas baru ke daftar tugas
+              const id = Date.now();
+              this.tasks.push({ id, ...this.newTask });
+              //   this.tasks.push(this.newTask);
+              // simpan daftar tugas ke Local Storage
+              localStorage.setItem("tasks", JSON.stringify(this.tasks));
+              // reset form
+              this.newTask = { title: "", deadline: "", bulanan: false };
+              this.$refs.newTaskTitle.focus();
+              this.updateLocalStorage();
+              this.sortOrder = "desc";
+              this.sortByDeadline();
+            }
+          },
+          removeTask(index) {
+            if (confirm("Apakah Anda yakin ingin menghapus tugas ini?")) {
+              // hapus tugas dari daftar tugas
+              this.tasks.splice(index, 1);
+              // simpan daftar tugas ke Local Storage
+              localStorage.setItem("tasks", JSON.stringify(this.tasks));
+            }
+          },
+
+          // removeTask(index) {
+
+          //     // hapus tugas dari daftar tugas
+          //     this.tasks.splice(index, 1);
+          //     // simpan daftar tugas ke Local Storage
+          //     localStorage.setItem('tasks', JSON.stringify(this.tasks));
+          // },
+          editTask(task) {
+            // masuk ke mode edit
+            this.isEditing = true;
+            // simpan data tugas yang akan diedit ke variabel editingTask
+            this.editingTask = task;
+          },
+          updateTask() {
+            // cari indeks tugas yang sedang diedit
+            const index = this.tasks.indexOf(this.editingTask);
+            // ganti data tugas dengan data yang baru
+            this.tasks.splice(index, 1, this.editingTask);
             // simpan daftar tugas ke Local Storage
             localStorage.setItem("tasks", JSON.stringify(this.tasks));
-            // reset form
-            this.newTask = { title: "", deadline: "" };
-            this.$refs.newTaskTitle.focus();
-            this.updateLocalStorage();
+            // keluar dari mode edit
+            this.isEditing = false;
             this.sortOrder = "desc";
             this.sortByDeadline();
-          }
-        },
-        removeTask(index) {
-          if (confirm("Apakah Anda yakin ingin menghapus tugas ini?")) {
-            // hapus tugas dari daftar tugas
-            this.tasks.splice(index, 1);
-            // simpan daftar tugas ke Local Storage
+          },
+          cancelEdit() {
+            // keluar dari mode edit
+            this.isEditing = false;
+          },
+          sortByDeadline() {
+            // ubah arah sorting
+            this.sortOrder = this.sortOrder === "asc" ? "desc" : "asc";
+            // urutkan daftar tugas berdasarkan deadline
+            this.tasks.sort((a, b) => {
+              // jika sortOrder adalah 'asc', lakukan sorting ascending
+              if (this.sortOrder === "asc") {
+                // jika deadline a lebih awal dari deadline b, return -1
+                if (a.deadline < b.deadline) return -1;
+                // jika deadline a sama dengan deadline b, return 0
+                if (a.deadline === b.deadline) return 0;
+                // jika deadline a lebih akhir dari deadline b, return 1
+                if (a.deadline > b.deadline) return 1;
+              } else {
+                // jika sortOrder adalah 'desc', lakukan sorting descending
+                // jika deadline a lebih akhir dari deadline b, return -1
+                if (a.deadline > b.deadline) return -1;
+                // jika deadline a sama dengan deadline b, return 0
+                if (a.deadline === b.deadline) return 0;
+                // jika deadline a lebih awal dari deadline b, return 1
+                if (a.deadline < b.deadline) return 1;
+              }
+            });
+          },
+          isToday(deadline) {
+            // ubah tanggal deadline menjadi Date object
+            const deadlineDate = new Date(deadline);
+            // ubah tanggal hari ini menjadi Date object
+            const today = new Date();
+            // bandingkan tanggal deadline dengan tanggal hari ini
+            return deadlineDate.toDateString() === today.toDateString();
+          },
+          isTomorrow(deadline) {
+            // ubah tanggal deadline menjadi Date object
+            const deadlineDate = new Date(deadline);
+            // ubah tanggal hari ini menjadi Date object
+            const today = new Date();
+            // tambahkan satu hari ke tanggal hari ini
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            // bandingkan tanggal deadline dengan tanggal besok
+            return deadlineDate.toDateString() === tomorrow.toDateString();
+          },
+          isTwoDaysLater(deadline) {
+            // ubah tanggal deadline menjadi Date object
+            const deadlineDate = new Date(deadline);
+            // ubah tanggal hari ini menjadi Date object
+            const today = new Date();
+            // tambahkan dua hari ke tanggal hari ini
+            const twoDaysLater = new Date(today);
+            twoDaysLater.setDate(twoDaysLater.getDate() + 2);
+            // bandingkan tanggal deadline dengan tanggal dua hari kemudian
+            return deadlineDate.toDateString() === twoDaysLater.toDateString();
+          },
+          updateLocalStorage() {
             localStorage.setItem("tasks", JSON.stringify(this.tasks));
+            localStorage.setItem(
+              "archivedTasks",
+              JSON.stringify(this.archivedTasks)
+            );
+
+            // Tambahkan informasi tanggal selesai pada task yang sudah di-check, dan hapus informasi tanggal selesai pada task yang sudah tidak di-check
+            this.tasks.forEach((task) => {
+              if (task.completed && !task.completedDate) {
+                task.completedDate = new Date().toLocaleDateString();
+              } else if (!task.completed && task.completedDate) {
+                delete task.completedDate;
+              }
+            });
+          },
+          moveTaskUp(index) {
+            if (index > 0) {
+              const task = this.tasks[index];
+              this.tasks.splice(index, 1);
+              this.tasks.splice(index - 1, 0, task);
+              this.updateLocalStorage();
+            }
+          },
+          moveTaskDown(index) {
+            if (index < this.tasks.length - 1) {
+              const task = this.tasks[index];
+              this.tasks.splice(index, 1);
+              this.tasks.splice(index + 1, 0, task);
+              this.updateLocalStorage();
+            }
+          },
+          showDatepicker() {
+            this.$refs.newTaskDeadline.click();
+            console.log("tanggal");
+          },
+          archiveTask(index) {
+            const task = this.tasks.splice(index, 1)[0];
+            this.archivedTasks.push(task);
+            this.updateLocalStorage();
+          },
+          activateTask(index) {
+            const task = this.archivedTasks.splice(index, 1)[0];
+            this.tasks.push(task);
+            this.updateLocalStorage();
+          },
+
+          archiveCompletedTasks() {
+            this.archivedTasks.push(
+              ...this.tasks.filter((task) => task.completed)
+            );
+            // Menghapus task yang sudah completed dari array tasks
+            this.tasks = this.tasks.filter((task) => !task.completed);
+            this.updateLocalStorage();
+          },
+          toggleAllCompleted() {
+            // Mengubah status completed semua task menjadi sama dengan allCompleted
+            this.tasks.forEach((task) => (task.completed = this.allCompleted));
+            this.updateLocalStorage();
+          },
+        },
+        created() {
+          // cek apakah ada daftar tugas di Local Storage
+          if (localStorage.getItem("tasks")) {
+            // jika ada, ambil daftar tugas dari Local Storage
+            // this.tasks = JSON.parse(localStorage.getItem('tasks'));
+            this.tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+            this.archivedTasks =
+              JSON.parse(localStorage.getItem("archivedTasks")) || [];
           }
-        },
-
-        // removeTask(index) {
-
-        //     // hapus tugas dari daftar tugas
-        //     this.tasks.splice(index, 1);
-        //     // simpan daftar tugas ke Local Storage
-        //     localStorage.setItem('tasks', JSON.stringify(this.tasks));
-        // },
-        editTask(task) {
-          // masuk ke mode edit
-          this.isEditing = true;
-          // simpan data tugas yang akan diedit ke variabel editingTask
-          this.editingTask = task;
-        },
-        updateTask() {
-          // cari indeks tugas yang sedang diedit
-          const index = this.tasks.indexOf(this.editingTask);
-          // ganti data tugas dengan data yang baru
-          this.tasks.splice(index, 1, this.editingTask);
-          // simpan daftar tugas ke Local Storage
-          localStorage.setItem("tasks", JSON.stringify(this.tasks));
-          // keluar dari mode edit
-          this.isEditing = false;
           this.sortOrder = "desc";
           this.sortByDeadline();
+          // this.$refs.newTaskTitle.focus();
         },
-        cancelEdit() {
-          // keluar dari mode edit
-          this.isEditing = false;
-        },
-        sortByDeadline() {
-          // ubah arah sorting
-          this.sortOrder = this.sortOrder === "asc" ? "desc" : "asc";
-          // urutkan daftar tugas berdasarkan deadline
-          this.tasks.sort((a, b) => {
-            // jika sortOrder adalah 'asc', lakukan sorting ascending
-            if (this.sortOrder === "asc") {
-              // jika deadline a lebih awal dari deadline b, return -1
-              if (a.deadline < b.deadline) return -1;
-              // jika deadline a sama dengan deadline b, return 0
-              if (a.deadline === b.deadline) return 0;
-              // jika deadline a lebih akhir dari deadline b, return 1
-              if (a.deadline > b.deadline) return 1;
-            } else {
-              // jika sortOrder adalah 'desc', lakukan sorting descending
-              // jika deadline a lebih akhir dari deadline b, return -1
-              if (a.deadline > b.deadline) return -1;
-              // jika deadline a sama dengan deadline b, return 0
-              if (a.deadline === b.deadline) return 0;
-              // jika deadline a lebih awal dari deadline b, return 1
-              if (a.deadline < b.deadline) return 1;
-            }
-          });
-        },
-        isToday(deadline) {
-          // ubah tanggal deadline menjadi Date object
-          const deadlineDate = new Date(deadline);
-          // ubah tanggal hari ini menjadi Date object
-          const today = new Date();
-          // bandingkan tanggal deadline dengan tanggal hari ini
-          return deadlineDate.toDateString() === today.toDateString();
-        },
-        isTomorrow(deadline) {
-          // ubah tanggal deadline menjadi Date object
-          const deadlineDate = new Date(deadline);
-          // ubah tanggal hari ini menjadi Date object
-          const today = new Date();
-          // tambahkan satu hari ke tanggal hari ini
-          const tomorrow = new Date(today);
-          tomorrow.setDate(tomorrow.getDate() + 1);
-          // bandingkan tanggal deadline dengan tanggal besok
-          return deadlineDate.toDateString() === tomorrow.toDateString();
-        },
-        isTwoDaysLater(deadline) {
-          // ubah tanggal deadline menjadi Date object
-          const deadlineDate = new Date(deadline);
-          // ubah tanggal hari ini menjadi Date object
-          const today = new Date();
-          // tambahkan dua hari ke tanggal hari ini
-          const twoDaysLater = new Date(today);
-          twoDaysLater.setDate(twoDaysLater.getDate() + 2);
-          // bandingkan tanggal deadline dengan tanggal dua hari kemudian
-          return deadlineDate.toDateString() === twoDaysLater.toDateString();
-        },
-        updateLocalStorage() {
-          localStorage.setItem("tasks", JSON.stringify(this.tasks));
-          localStorage.setItem(
-            "archivedTasks",
-            JSON.stringify(this.archivedTasks)
-          );
-
-          // Tambahkan informasi tanggal selesai pada task yang sudah di-check, dan hapus informasi tanggal selesai pada task yang sudah tidak di-check
-          this.tasks.forEach((task) => {
-            if (task.completed && !task.completedDate) {
-              task.completedDate = new Date().toLocaleDateString();
-            } else if (!task.completed && task.completedDate) {
-              delete task.completedDate;
-            }
-          });
-        },
-        moveTaskUp(index) {
-          if (index > 0) {
-            const task = this.tasks[index];
-            this.tasks.splice(index, 1);
-            this.tasks.splice(index - 1, 0, task);
-            this.updateLocalStorage();
-          }
-        },
-        moveTaskDown(index) {
-          if (index < this.tasks.length - 1) {
-            const task = this.tasks[index];
-            this.tasks.splice(index, 1);
-            this.tasks.splice(index + 1, 0, task);
-            this.updateLocalStorage();
-          }
-        },
-        showDatepicker() {
-          this.$refs.newTaskDeadline.click();
-          console.log("tanggal");
-        },
-        archiveTask(index) {
-          const task = this.tasks.splice(index, 1)[0];
-          this.archivedTasks.push(task);
-          this.updateLocalStorage();
-        },
-        activateTask(index) {
-          const task = this.archivedTasks.splice(index, 1)[0];
-          this.tasks.push(task);
-          this.updateLocalStorage();
-        },
-
-        archiveCompletedTasks() {
-          this.archivedTasks.push(
-            ...this.tasks.filter((task) => task.completed)
-          );
-          // Menghapus task yang sudah completed dari array tasks
-          this.tasks = this.tasks.filter((task) => !task.completed);
-          this.updateLocalStorage();
-        },
-        toggleAllCompleted() {
-          // Mengubah status completed semua task menjadi sama dengan allCompleted
-          this.tasks.forEach((task) => (task.completed = this.allCompleted));
-          this.updateLocalStorage();
-        },
-      },
-      created() {
-        // cek apakah ada daftar tugas di Local Storage
-        if (localStorage.getItem("tasks")) {
-          // jika ada, ambil daftar tugas dari Local Storage
-          // this.tasks = JSON.parse(localStorage.getItem('tasks'));
-          this.tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-          this.archivedTasks =
-            JSON.parse(localStorage.getItem("archivedTasks")) || [];
-        }
-        this.sortOrder = "desc";
-        this.sortByDeadline();
-        // this.$refs.newTaskTitle.focus();
-      },
-    });
-  </script>
-</body>
-
+      });
+    </script>
+  </body>
 </html>
