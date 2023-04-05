@@ -33,7 +33,7 @@
         <!-- <h1 class="text-gray-700 font-bold text-4xl mb-8 mt-10">Welcome,
             <span v-text="username"></span>!
         </h1> -->
-        <div class="flex">
+        <div class="flex justify-conten-end">
 
             <button v-if="!tampilkanArsip" class="bg-cyan-500 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
                 type="button" @click="tampilkanArsip=!tampilkanArsip; status=2;">
@@ -51,15 +51,18 @@
             <div :class="kiri">
                 <div class="p-5">
 
-                    <div class="text-center">
+                    <div class="ml-20">
                         <h2 class="text-gray-700 font-bold text-3xl mb-4">Todo List</h2>
 
-                        <ol class="list-disc list-inside mb-4" v-for="todo, index in sortedTasks">
-                            <li class="text-gray-700 " @click="dipilih = index" @mouseleave="dipilih = 99999">
-                                <span class="font-bold text-xl mb-3">
+                        <div class="list-disc list-inside mb-4" v-for="todo, index in sortedTasks">
+
+                            <div class="text-gray-700 " @click="dipilih = index" @mouseleave="dipilih = 99999">
+                                <input @change="tandaiSelesai(todo)" v-model="todo.col7" type="checkbox" class="form-check-input" />
+                                <span :class="{ 'line-through font-bdivd text-xl mb-3 ml-5': todo.col7 }">
                                     {{todo.col3}}
                                 </span>
-                                <span class="text-red" v-if="todo.col4"> (deadline: {{todo.col4}})</span>
+                                <br>
+                                <span class="ml-5" v-if="todo.col4"> (deadline: {{todo.col4}})</span>
                                 <div v-if="dipilih == index">
 
                                     <div v-if="todo.col5 == 1">
@@ -74,13 +77,15 @@
                                         </button>
                                     </div>
                                 </div>
-                            </li>
 
-                        </ol>
+                            </div>
+
+
+                        </div>
                     </div>
 
                     <!-- <div class="container w-25">
-                        <table class="table table-bordered border-1">
+                        <table class="table table-bordered border-1" style="border: grey 1px solid;">
                             <thead>
                                 <tr>
                                     <th class="font-weight-bold text-center" scope="col" style="width: 5%">
@@ -103,8 +108,8 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr v-for="todo in TaskAktif">
+                            <tbody style="border: grey 1px solid;">
+                                <tr v-for="todo in TaskAktif" style="border: grey 1px solid;">
                                     <td class="text-center">
                                         <input type="checkbox" class="form-check-input" />
                                     </td>
@@ -253,14 +258,60 @@
                     });
 
                 },
-                                sortedTasks() {
+                sortedTasks() {
                     return this.TaskAktif.sort((a, b) => {
                         return new Date(a.col4) - new Date(b.col4);
                     });
                 },
-                
             },
             methods: {
+                tandaiSelesai(x) {
+                    // alert('update')
+                    // var waktu1 = Date.now();
+                    if (x.col7 == true) {
+                        var itimestamp = x.id;
+                        console.log(itimestamp);
+                        var url = `https://script.google.com/macros/s/AKfycbzfOmAEsUqWORVFgVgp3-juYufE-2xrp5hn85E2hZT0hXLw8_Ur-9sxY1eCDQLo8mJI/exec?action=update&table=todo2023&id=${itimestamp}&data={"col7":true}`
+                        // this.test = url;
+                        // timestamp=${itimestamp}
+                        let app = this;
+                        $.ajax({
+                            type: 'GET',
+                            url: url,
+                            crossDomain: true,
+                            dataType: 'jsonp',
+                            dataType: "text",
+                            success: function (resultData) {
+                                // alert('Task dipindahkan ke Arsip')
+                                // app.GetDataTasks();
+                                console.log('berhasil selesai')
+
+                            }
+                        });
+
+                    } else {
+                        var itimestamp = x.id;
+                        console.log(itimestamp);
+                        var url = `https://script.google.com/macros/s/AKfycbzfOmAEsUqWORVFgVgp3-juYufE-2xrp5hn85E2hZT0hXLw8_Ur-9sxY1eCDQLo8mJI/exec?action=update&table=todo2023&id=${itimestamp}&data={"col7":false}`
+                        // this.test = url;
+                        // timestamp=${itimestamp}
+                        let app = this;
+                        $.ajax({
+                            type: 'GET',
+                            url: url,
+                            crossDomain: true,
+                            dataType: 'jsonp',
+                            dataType: "text",
+                            success: function (resultData) {
+                                // alert('Task dipindahkan ke Arsip')
+                                // app.GetDataTasks();
+                                console.log('berhasil selesai')
+
+                            }
+                        });
+
+                    }
+                },
                 showAddTodoForm() {
                     this.showSidebar = true
                     this.kiri = "w-1/2"
@@ -276,7 +327,7 @@
                 logout() {
                     localStorage.removeItem('username');
                     localStorage.removeItem('password');
-                    window.location.href = '/todo/login.html';
+                    window.location.href = 'login.html';
                 },
                 saveTodo() {
 
