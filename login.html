@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Login</title>
+    <!-- Load Tailwind CSS from CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.17/dist/tailwind.min.css" rel="stylesheet" />
+    <!-- Load Vue.js from CDN -->
+    <script src="https://unpkg.com/vue@2.6.14"></script>
+</head>
+
+<body class="bg-purple-500">
+    <div class="flex flex-col items-center justify-center min-h-screen">
+        <h1 class="text-white font-bold text-4xl mb-8">Login</h1>
+        <div id="app">
+            <form class="bg-white rounded-md p-8 shadow-lg" v-on:submit.prevent="handleSubmit">
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2" for="username">
+                        Username
+                    </label>
+                    <input class="appearance-none border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="username" type="text" v-model="username" required />
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-bold mb-2" for="password">
+                        Password
+                    </label>
+                    <input class="appearance-none border rounded-md w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                        id="password" type="password" v-model="password" required />
+                </div>
+                <div class="flex items-center justify-between">
+                    <button class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        type="submit">
+                        Login
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                username: "",
+                password: "",
+            },
+            methods: {
+                handleSubmit: function () {
+                    localStorage.setItem("username", this.username);
+                    localStorage.setItem("password", this.password);
+                    window.location.href = "/todo/todo.html";
+                },
+            },
+        });
+    </script>
+</body>
+
+</html>
