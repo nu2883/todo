@@ -8,11 +8,43 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Include Vue JS -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <style>
+.loading-overlay {
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-spinner {
+  border: 16px solid #f3f3f3;
+  border-top: 16px solid #3498db;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+
 </head>
 
 <body class="bg-purple-200 ">
-    <div id="app" class="flex flex-col items-center justify-center ">
-        <nav class="flex fixed top-0 items-center justify-between flex-wrap bg-purple-600 p-6 w-full">
+    <div id="app" class="flex flex-col items-center justify-center container">
+        <nav class="z-50 flex fixed top-0 items-center justify-between flex-wrap bg-purple-600 p-6 w-full">
             <div class="flex items-center flex-shrink-0 text-white mr-6 ">
                 <span class="font-bold text-xl">Todo Page : {{ username }} ! </span>
             </div>
@@ -20,7 +52,8 @@
                 <div class="text-white mr-4">
 
                 </div>
-                <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                <button
+                    class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     @click="logout()">Logout</button>
             </div>
         </nav>
@@ -35,12 +68,14 @@
         </h1> -->
         <div class="flex justify-conten-end">
 
-            <button v-if="!tampilkanArsip" class="bg-cyan-500 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
+            <button v-if="!tampilkanArsip"
+                class="bg-cyan-500 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
                 type="button" @click="tampilkanArsip=!tampilkanArsip; status=2;">
                 Tampilkan Arsip Task
             </button>
 
-            <button v-if="tampilkanArsip" class="bg-cyan-500 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
+            <button v-if="tampilkanArsip"
+                class="bg-cyan-500 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
                 type="button" @click="tampilkanArsip=!tampilkanArsip; status=1;">
                 Tampilkan Task
             </button>
@@ -51,30 +86,43 @@
             <div :class="kiri">
                 <div class="p-5">
 
-                    <div class="ml-20">
+                    <div>
                         <h2 class="text-gray-700 font-bold text-3xl mb-4">Todo List</h2>
-
+                        <!-- {{sortedTasks}} -->
                         <div class="list-disc list-inside mb-4" v-for="todo, index in sortedTasks">
 
                             <div class="text-gray-700 " @click="dipilih = index" @mouseleave="dipilih = 99999">
-                                <input @change="tandaiSelesai(todo)" v-model="todo.col7" type="checkbox" class="form-check-input" />
-                                <span :class="{ 'line-through font-bdivd text-xl mb-3 ml-5': todo.col7 }">
+                                <input @change="tandaiSelesai(todo)" v-model="todo.col7" type="checkbox"
+                                    class="form-check-input font-bdivd text-2xl mt-2" />
+                                <span
+                                    :class="todo.col7 ? 'line-through font-bdivd text-2xl mb-3 ' : 'font-bdivd text-2xl mb-3 '">
                                     {{todo.col3}}
                                 </span>
                                 <br>
-                                <span class="ml-5" v-if="todo.col4"> (deadline: {{todo.col4}})</span>
+                                <span class="" v-if="todo.col4"> (deadline: {{todo.col4}})</span>
                                 <div v-if="dipilih == index">
+                                    <!-- {{todo.col5}} -->
+                                    <div >
+                                        <div v-if="todo.col5 == 1">
+                                            <button
+                                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
+                                                type="button" @click="hapusTask(todo)">
+                                                Hapus
+                                            </button>
 
-                                    <div v-if="todo.col5 == 1">
-                                        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
-                                            type="button" @click="hapusTask(todo)">
-                                            Hapus
-                                        </button>
-
-                                        <button class="bg-cyan-500 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
-                                            type="button" @click="selesaiTask(todo)">
-                                            Selesai
-                                        </button>
+                                            <button
+                                                class="bg-cyan-500 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
+                                                type="button" @click="selesaiTask(todo)">
+                                                Selesai
+                                            </button>
+                                        </div>
+                                        <div v-else>
+                                            <button
+                                                class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
+                                                type="button" @click="aktifkan(todo)">
+                                                aktifkan lagi
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -162,52 +210,87 @@
                 </div>
 
             </div>
-            <div v-if="showSidebar" class="flex justify-conten-center w-full ">
-                <div class="mt-8 w-full">
-                    <transition name="fade">
-                        <div class="p-4 bg-white rounded-lg shadow-lg w-full ">
-                            <h3 class="text-lg font-bold mb-4">Add Todo</h3>
-                            <form class="flex flex-col w-full" @submit.prevent="addTodo">
-                                <div class="mb-4">
-                                    <label class="block text-gray-700 font-bold mb-2" for="task">
-                                        Task
-                                    </label>
-                                    <input v-model="newTodo.task" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                        id="task" type="text" placeholder="Enter task">
-                                </div>
-                                <div class="mb-4">
-                                    <label class="block text-gray-700 font-bold mb-2" for="deadline">
-                                        Deadline
-                                    </label>
-                                    <input v-model="newTodo.deadline" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                        id="deadline" type="date">
-                                </div>
-                                <div class="mb-4 flex items-center">
-                                    <input v-model="newTodo.monthly" class="mr-2 leading-tight" type="checkbox" id="monthly">
-                                    <label class="text-gray-700 font-bold" for="monthly">
-                                        Monthly
-                                    </label>
-                                </div>
-                                <div class="flex justify-end">
-                                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
-                                        type="button" @click="saveTodo">
-                                        Save
-                                    </button>
-                                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                                        type="button" @click="closeAddTodoForm">
-                                        Cancel
-                                    </button>
-                                </div>
-                        </div>
-                </div>
-            </div>
+
         </div>
 
 
+        <!-- modal start -->
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Input Task</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="flex justify-conten-center w-full ">
+                            <div class="w-full">
+                                <transition name="fade">
+                                    <div class="p-4 bg-white rounded-lg shadow-lg w-full ">
+                                        <!-- <h3 class="text-lg font-bold mb-4">Add Todo</h3> -->
+                                        <form class="flex flex-col w-full" @submit.prevent="addTodo">
+                                            <div class="mb-4">
+                                                <label class="block text-gray-700 font-bold mb-2" for="task">
+                                                    Task
+                                                </label>
+                                                <input v-model="newTodo.task"
+                                                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                    id="task" type="text" placeholder="Enter task">
+                                            </div>
+                                            <div class="mb-4">
+                                                <label class="block text-gray-700 font-bold mb-2" for="deadline">
+                                                    Deadline
+                                                </label>
+                                                <input v-model="newTodo.deadline"
+                                                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                    id="deadline" type="date">
+                                            </div>
+                                            <div class="mb-4 flex items-center">
+                                                <input v-model="newTodo.monthly" class="mr-2 leading-tight"
+                                                    type="checkbox" id="monthly">
+                                                <label class="text-gray-700 font-bold" for="monthly">
+                                                    Monthly
+                                                </label>
+                                            </div>
+                                            <div class="flex justify-end">
+                                                <button
+                                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
+                                                    type="button" @click="saveTodo">
+                                                    Save
+                                                </button>
+                                                <button data-dismiss="modal"
+                                                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                                    type="button" @click="closeAddTodoForm">
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+        <!-- modal end -->
+
         <!-- tombol tambah task start-->
 
-        <div class="fixed bottom-8 right-8" v-if="!showSidebar">
-            <button class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
+        <div class="fixed bottom-8 right-8">
+
+            <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                Launch demo modal
+            </button> -->
+
+            <button type="button" data-toggle="modal" data-target="#exampleModal"
+                class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
                 @click="showAddTodoForm">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M4 6h12a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 5h8a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z" />
@@ -216,13 +299,29 @@
         </div>
         <!-- tombol tambah task end-->
 
+        <!-- loading start-->
+          <div class="loading-overlay" v-if="isLoading">
+    <div class="loading-spinner"></div>
+  </div>
+        <!-- loading end -->
+
 
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
     <!-- ajax -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
 
 
     <script>
@@ -246,6 +345,7 @@
                     tampilkanArsip: false,
                     status: 1,
                     dipilih: '99999',
+                    isLoading: false,
 
                 }
             }
@@ -285,6 +385,7 @@
                                 // alert('Task dipindahkan ke Arsip')
                                 // app.GetDataTasks();
                                 console.log('berhasil selesai')
+                            
 
                             }
                         });
@@ -314,8 +415,8 @@
                 },
                 showAddTodoForm() {
                     this.showSidebar = true
-                    this.kiri = "w-1/2"
-                    this.kanan = "w-1/2"
+                    // this.kiri = "w-1/2"
+                    // this.kanan = "w-1/2"
                     // alert('oke')
                 },
                 closeAddTodoForm() {
@@ -330,7 +431,7 @@
                     window.location.href = 'login.html';
                 },
                 saveTodo() {
-
+    this.isLoading = true;
                     if (this.newTodo.task) {
 
                         var waktu1 = Date.now();
@@ -353,7 +454,7 @@
                                 app.newTodo.task = ''
                                 app.newTodo.deadline = ''
                                 app.newTodo.monthly = false
-
+ app.isLoading = false;
                                 // app.GetDataTasks();
                             }
                         });
@@ -366,6 +467,7 @@
                     }
                 },
                 GetDataTasks() {
+                    this.isLoading = true;
                     this.todos = [];
                     this.queryUser();
                     // var url ="https://script.google.com/macros/s/AKfycbyc7wzSrUGxQhcBN5EfVC-rNRj3wncZJOVTWAChXtSwnrHkGjoaoI91bggme_fUOIP9/exec?action=read&table=query";
@@ -375,9 +477,11 @@
                     $.getJSON(url, function (json) {
                         // console.log(json.data);
                         app.todos = json.data;
+                         app.isLoading = false;
                     });
                 },
                 hapusTask(aa) {
+                     this.isLoading = true;
                     // this.todos = [];
                     // alert('update')
                     // var waktu1 = Date.now();
@@ -394,7 +498,7 @@
                         dataType: 'jsonp',
                         dataType: "text",
                         success: function (resultData) {
-                            alert('Task Dihapus')
+                            // alert('Task Dihapus')
                             app.GetDataTasks();
 
                         }
@@ -402,7 +506,7 @@
 
                 },
                 selesaiTask(aa) {
-
+ this.isLoading = true;
                     // alert('update')
                     // var waktu1 = Date.now();
                     var itimestamp = aa.id;
@@ -418,12 +522,35 @@
                         dataType: 'jsonp',
                         dataType: "text",
                         success: function (resultData) {
-                            alert('Task dipindahkan ke Arsip')
+                            // alert('Task dipindahkan ke Arsip')
                             app.GetDataTasks();
 
                         }
                     });
 
+                },
+                aktifkan(aa){
+                     this.isLoading = true;
+             // alert('update')
+                    // var waktu1 = Date.now();
+                    var itimestamp = aa.id;
+                    console.log(itimestamp);
+                    var url = `https://script.google.com/macros/s/AKfycbzfOmAEsUqWORVFgVgp3-juYufE-2xrp5hn85E2hZT0hXLw8_Ur-9sxY1eCDQLo8mJI/exec?action=update&table=todo2023&id=${itimestamp}&data={"col5":1}`
+                    // this.test = url;
+                    // timestamp=${itimestamp}
+                    let app = this;
+                    $.ajax({
+                        type: 'GET',
+                        url: url,
+                        crossDomain: true,
+                        dataType: 'jsonp',
+                        dataType: "text",
+                        success: function (resultData) {
+                            // alert('Task dipindahkan ke Arsip')
+                            app.GetDataTasks();
+
+                        }
+                    });
                 },
                 queryUser() {
                     // alert('update')
