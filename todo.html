@@ -54,7 +54,7 @@
                     <div class="text-center">
                         <h2 class="text-gray-700 font-bold text-3xl mb-4">Todo List</h2>
 
-                        <ol class="list-disc list-inside mb-4" v-for="todo, index in TaskAktif">
+                        <ol class="list-disc list-inside mb-4" v-for="todo, index in sortedTasks">
                             <li class="text-gray-700 " @click="dipilih = index" @mouseleave="dipilih = 99999">
                                 <span class="font-bold text-xl mb-3">
                                     {{todo.col3}}
@@ -252,7 +252,13 @@
                         return blog.col5 == this.status;
                     });
 
-                }
+                },
+                                sortedTasks() {
+                    return this.TaskAktif.sort((a, b) => {
+                        return new Date(a.col4) - new Date(b.col4);
+                    });
+                },
+                
             },
             methods: {
                 showAddTodoForm() {
