@@ -249,7 +249,7 @@
 
                 TaskAktif: function () {
                     return this.todos.filter((blog) => {
-                        return blog.col5 == this.status;
+                        return blog.col5 == this.status && blog.col2 == this.username;
                     });
 
                 },
