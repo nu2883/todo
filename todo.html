@@ -82,136 +82,45 @@
         </div>
 
 
-        <div class="flex container mx-5">
-            <div :class="kiri">
-                <div class="p-5">
-
-                    <div>
-                        <h2 class="text-gray-700 font-bold text-3xl mb-4">Todo List</h2>
-                        <!-- {{sortedTasks}} -->
-                        <div class="list-disc list-inside mb-4" v-for="todo, index in sortedTasks">
-
-                            <div class="text-gray-700 " @click="dipilih = index" @mouseleave="dipilih = 99999">
-                                <input @change="tandaiSelesai(todo)" v-model="todo.col7" type="checkbox"
-                                    class="form-check-input font-bdivd text-2xl mt-2" />
-                                <span
-                                    :class="todo.col7 ? 'line-through font-bdivd text-2xl mb-3 ' : 'font-bdivd text-2xl mb-3 '">
-                                    {{todo.col3}}
-                                </span>
-                                <br>
-                                <span class="" v-if="todo.col4"> (deadline: {{todo.col4}})</span>
-                                <div v-if="dipilih == index">
-                                    <!-- {{todo.col5}} -->
-                                    <div >
-                                        <div v-if="todo.col5 == 1">
-                                            <button
-                                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
-                                                type="button" @click="hapusTask(todo)">
-                                                Hapus
-                                            </button>
-
-                                            <button
-                                                class="bg-cyan-500 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
-                                                type="button" @click="selesaiTask(todo)">
-                                                Selesai
-                                            </button>
-                                        </div>
-                                        <div v-else>
-                                            <button
-                                                class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
-                                                type="button" @click="aktifkan(todo)">
-                                                aktifkan lagi
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-
-                        </div>
-                    </div>
-
-                    <!-- <div class="container w-25">
-                        <table class="table table-bordered border-1" style="border: grey 1px solid;">
-                            <thead>
-                                <tr>
-                                    <th class="font-weight-bold text-center" scope="col" style="width: 5%">
-                                        <input type="checkbox" />
-                                    </th>
-                                    <th class="font-weight-bold text-center" scope="col" style="width: 60%">
-                                        Tugas
-                                    </th>
-                                    <th class="font-weight-bold text-center" style="cursor: pointer; width: 15%" scope="col">
-                                        Deadline
-                                    </th>
-                                    <th class="font-weight-bold text-center" scope="col" style="width: 15%">
-                                        Aksi
-                                        <button>
-                                            Arsipkan Semua
-                                        </button>
-                                    </th>
-                                    <th class="font-weight-bold text-center" scope="col" style="width: 10%">
-                                        #
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody style="border: grey 1px solid;">
-                                <tr v-for="todo in TaskAktif" style="border: grey 1px solid;">
-                                    <td class="text-center">
-                                        <input type="checkbox" class="form-check-input" />
-                                    </td>
-                                    <td>
-                                        <span>
-                                            <i class="bi-alarm text-primary"></i>
-                                        </span>
-                                        {{todo.col3}}
-                                    </td>
-                                    <td class="text-center">
-                                        <span>
-                                            {{todo.col4}}
-                                        </span>
-                                        <br />
-                                        <span>
-                                            selesai :
-                                            <input type="text" />
-                                        </span>
-                                    </td>
-                                    <td class="text-center">
-
-
-                                        <button class="btn btn-sm btn-success">
-                                            Edit
-                                        </button>
-                                        <button class="btn btn-sm btn-danger">
-                                            Hapus
-                                        </button>
-                                        <button>
-                                            Arsipkan
-                                        </button>
-
-                                    </td>
-                                    <td style="text-size: 5px">
-
-                                        <button class="btn btn-sm btn-outline-danger">
-                                            ▲
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-success">
-                                            ▼
-                                        </button>
-
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div> -->
-
-
+<div class="flex container sm:w-full mx-5 sm:flex-col sm:items-center">
+  <div :class="kiri" class="sm:w-full">
+    <div class="p-5">
+      <div>
+        <h2 class="text-gray-700 font-bold text-3xl mb-4">Todo List</h2>
+        <div class="list-disc list-inside mb-4" v-for="todo, index in sortedTasks">
+          <div class="text-gray-700 " @click="dipilih = index" @mouseleave="dipilih = 99999">
+            <input @change="tandaiSelesai(todo)" v-model="todo.col7" type="checkbox"
+              class="form-check-input font-bdivd text-2xl mt-2" />
+            <span :class="todo.col7 ? 'line-through font-bdivd text-2xl mb-3 ' : 'font-bdivd text-2xl mb-3 '">
+              {{todo.col3}}
+            </span>
+            <br />
+            <span class="" v-if="todo.col4"> (deadline: {{todo.col4}})</span>
+            <div v-if="dipilih == index">
+              <div>
+                <div v-if="todo.col5 == 1">
+                  <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2" type="button" @click="hapusTask(todo)">
+                    Hapus
+                  </button>
+                  <button class="bg-cyan-500 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2" type="button" @click="selesaiTask(todo)">
+                    Selesai
+                  </button>
                 </div>
-
+                <div v-else>
+                  <button class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2" type="button" @click="aktifkan(todo)">
+                    aktifkan lagi
+                  </button>
+                </div>
+              </div>
             </div>
-
+          </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 
         <!-- modal start -->
