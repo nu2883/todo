@@ -89,25 +89,28 @@
                             <span class="" v-if="todo.col4"> {{todo.col4}}</span>
                         </td>
                         <td>
-                            <div v-if="todo.col5 == 1">
-                                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
-                                    type="button" @click="hapusTask(todo)">
-                                    Hapus
-                                </button>
-                                <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
-                                    type="button" @click="selesaiTask(todo)">
-                                    Selesai
-                                </button>
-                            </div>
-                            <div v-else>
-                                <button class="text-xs bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
-                                    type="button" @click="hapusTask(todo)">
-                                    Hapus
-                                </button>
-                                <button class="text-xs bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
-                                    type="button" @click="aktifkan(todo)">
-                                    aktifkan lagi
-                                </button>
+                            <div v-if="dipilih == index">
+
+                                <div v-if="todo.col5 == 1">
+                                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
+                                        type="button" @click="hapusTask(todo)">
+                                        Hapus
+                                    </button>
+                                    <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
+                                        type="button" @click="selesaiTask(todo)">
+                                        Selesai
+                                    </button>
+                                </div>
+                                <div v-else>
+                                    <button class="text-xs bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
+                                        type="button" @click="hapusTask(todo)">
+                                        Hapus
+                                    </button>
+                                    <button class="text-xs bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
+                                        type="button" @click="aktifkan(todo)">
+                                        aktifkan lagi
+                                    </button>
+                                </div>
                             </div>
                         </td>
                     </tr>
