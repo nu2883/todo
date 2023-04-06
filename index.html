@@ -1,407 +1,472 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <title>To-Do List</title>
-  <!-- tambahkan Bootstrap 5 -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" />
-  <style>
-    /* ... */
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    .pink {
-      background-color: pink;
-    }
-
-    .orange {
-      background-color: orange;
-    }
-
-    .salmon {
-      background-color: yellow;
-    }
-  </style>
-
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
-
-  <script src="https://unpkg.com/vuedraggable@2.23.2/dist/vuedraggable.umd.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+        crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+    <title>Todo 2023</title>
 </head>
 
-<body>
-  <div id="app" class="container">
-    <h1 class="text-center">To Do List 2023</h1>
-                <div class="text-center">
-                <a href="/todo/cermin.html" target="_blank">
-                          <button class="btn btn-xs btn-success">cermin</button>
-                </a>
+<body style="height: 100%;" class="bg-purple-200">
+    <div id="app" class="container ">
+
+        <nav class="navbar  navbar-expand-lg fixed-top text-black-900 bg-purple-600 ">
+            <div class="container">
+                <a class="navbar-brand text-white font-bold" href="#">Todo Page : {{ username }} !</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class=" navbar" id="navbarSupportedContent">
+
+                    <form class="form-inline my-2 my-lg-0">
+                        <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"> -->
+                        <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
+                            @click="logout()">Logout</button>
+                    </form>
+                </div>
+
             </div>
-    <!-- {{tasks}} -->
-    <!-- <h1 class="text-center text-danger mb-3">To Do List 2023 Dev</h1> -->
-    <!-- form untuk menambah tugas baru -->
-    <!-- form untuk menambah tugas baru -->
-    <div class="row">
-      <div class="col-8">
-        <form v-if="!isEditing" @submit.prevent="addTask">
-          <input type="text" v-model="newTask.title" placeholder="Tambahkan tugas baru" ref="newTaskTitle" @blur="showDatepicker" />
-          <input type="date" v-model="newTask.deadline" ref="newTaskDeadline" />
-          <button type="submit">Tambah</button>
-        </form>
-      </div>
-      <div class="col-4 d-flex justify-content-end">
-        <button v-if="!showTasks" @click="showTasks = !showTasks">
-          Tampilkan Tugas
-        </button>
-        <button v-else @click="showTasks = !showTasks">
-          Tampilkan Arsip
-        </button>
-      </div>
+        </nav>
+
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="container position-relative ">
+            <div class="d-flex justify-content-between ">
+                <button data-toggle="modal" data-target="#exampleModal" @click="showAddTodoForm" type="button" type="button" data-toggle="modal"
+                    data-target="#exampleModal" @click="showAddTodoForm" class="bg-purple-600 hover:bg-purple-700
+                text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">Tambah Task</button>
+                <div>
+                    <button v-if="!tampilkanArsip" class="bg-cyan-500 hover:bg-cyan-700
+                text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline" type="button" @click="tampilkanArsip=!tampilkanArsip; status=2;">
+                        Tampilkan Arsip Task
+                    </button>
+
+                    <button v-if="tampilkanArsip" class="bg-cyan-600 hover:bg-cyan-700
+                text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline" type="button" @click="tampilkanArsip=!tampilkanArsip; status=1;">
+                        Tampilkan Task
+                    </button>
+                </div>
+
+            </div>
+
+
+            <table class="table table-hover mt-3 table-responsive ">
+                <thead>
+                    <tr width="100%">
+                        <th width="3%" scope="col">#</th>
+                        <th scope="col">Nama Task</th>
+                        <th class="text-center" width="10%" scope="col">Deadline</th>
+                        <th class="text-center" width="15%" scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="todo, index in sortedTasks" @click="dipilih = index" @mouseleave="dipilih = 99999">
+                        <th scope="row">
+                            <input @change="tandaiSelesai(todo)" v-model="todo.col7" type="checkbox" class="form-check-input font-bdivd text-2xl mt-2"
+                            />
+                        </th>
+                        <td>
+                            <span :class="todo.col7 ? 'line-through font-bdivd text-2xl mb-3 ' : 'font-bdivd text-2xl mb-3 '">
+                                {{todo.col3}}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="" v-if="todo.col4"> {{todo.col4}}</span>
+                        </td>
+                        <td>
+                            <div v-if="todo.col5 == 1">
+                                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
+                                    type="button" @click="hapusTask(todo)">
+                                    Hapus
+                                </button>
+                                <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
+                                    type="button" @click="selesaiTask(todo)">
+                                    Selesai
+                                </button>
+                            </div>
+                            <div v-else>
+                                <button class="text-xs bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
+                                    type="button" @click="hapusTask(todo)">
+                                    Hapus
+                                </button>
+                                <button class="text-xs bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mr-2"
+                                    type="button" @click="aktifkan(todo)">
+                                    aktifkan lagi
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-end">
+
+            </div>
+
+        </div>
+
+
+
+
+        <!-- modal start -->
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Input Task</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="flex justify-conten-center w-full ">
+                            <div class="w-full">
+                                <transition name="fade">
+                                    <div class="p-4 bg-white rounded-lg shadow-lg w-full ">
+                                        <!-- <h3 class="text-lg font-bold mb-4">Add Todo</h3> -->
+                                        <form class="flex flex-col w-full" @submit.prevent="addTodo">
+                                            <div class="mb-4">
+                                                <label class="block text-gray-700 font-bold mb-2" for="task">
+                                                    Task
+                                                </label>
+                                                <input v-model="newTodo.task" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                    id="task" type="text" placeholder="Enter task">
+                                            </div>
+                                            <div class="mb-4">
+                                                <label class="block text-gray-700 font-bold mb-2" for="deadline">
+                                                    Deadline
+                                                </label>
+                                                <input v-model="newTodo.deadline" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                    id="deadline" type="date">
+                                            </div>
+                                            <div class="mb-4 flex items-center">
+                                                <input v-model="newTodo.monthly" class="mr-2 leading-tight" type="checkbox" id="monthly">
+                                                <label class="text-gray-700 font-bold" for="monthly">
+                                                    Monthly
+                                                </label>
+                                            </div>
+                                            <div class="flex justify-end">
+                                                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
+                                                    type="button" @click="saveTodo">
+                                                    Save
+                                                </button>
+                                                <button data-dismiss="modal" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                                    type="button" @click="closeAddTodoForm">
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div> -->
+                </div>
+            </div>
+        </div>
+        <!-- modal end -->
+
+        <!-- loading start-->
+        <div class="loading-overlay" v-if="isLoading">
+            <div class="loading-spinner"></div>
+        </div>
+        <!-- loading end -->
+
     </div>
 
-    <form v-if="isEditing" @submit.prevent="updateTask">
-      <input type="text" v-model="editingTask.title" placeholder="Ubah judul tugas" />
-      <input type="date" v-model="editingTask.deadline" />
-      <button type="submit">Simpan</button>
-      <button @click="cancelEdit">Batal</button>
-    </form>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <!-- ajax -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <!-- menampilkan daftar tugas -->
-    <table class="table table-bordered" v-if="showTasks">
-      <thead>
-        <tr>
-          <th class="font-weight-bold text-center" scope="col" style="width: 5%">
-            <input type="checkbox" v-model="allCompleted" @change="toggleAllCompleted" />
-          </th>
-          <th class="font-weight-bold text-center" scope="col" style="width: 60%">
-            Tugas
-          </th>
-          <th class="font-weight-bold text-center" style="cursor: pointer; width: 15%" scope="col" @click="sortByDeadline">
-            Deadline
-          </th>
-          <th class="font-weight-bold text-center" scope="col" style="width: 15%">
-            Aksi
-            <button v-if="tasks.filter(task => task.completed).length > 1" @click="archiveCompletedTasks">
-              Arsipkan Semua
-            </button>
-          </th>
-          <th class="font-weight-bold text-center" scope="col" style="width: 10%">
-            #
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(task, index) in tasks" :key="index" :class="{ pink: isToday(task.deadline), orange: isTomorrow(task.deadline), salmon: isTwoDaysLater(task.deadline) }">
-          <td class="text-center">
-            <input type="checkbox" v-model="task.completed" @change="updateLocalStorage" class="form-check-input" />
-          </td>
-          <td :class="{ 'text-decoration-line-through': task.completed }">
-            {{ task.title }}
-          </td>
-          <td class="text-center">
-            <span :class="{ 'text-decoration-line-through ': task.completed }">
-              {{ task.deadline }}
-            </span>
-            <br />
-            <span v-if="task.completedDate">
-              selesai :
-              <input type="text" v-model="task.completedDate">
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 
-            </span>
-          </td>
-          <td class="text-center">
-            <button v-if="!task.completed" @click="editTask(task)">
-              Edit
-            </button>
-            <button v-if="!task.completed" @click="removeTask(index)">
-              Hapus
-            </button>
-            <button v-if="task.completed" @click="archiveTask(index)">
-              Arsipkan
-            </button>
-          </td>
-          <td>
-            <button @click="moveTaskUp(index)">▲</button>
-            <button @click="moveTaskDown(index)">▼</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
 
-    <!-- Tabel daftar tugas yang sudah diarsipkan -->
-    <table class="table table-bordered" v-if="!showTasks">
-      <thead>
-        <tr>
-          <th class="font-weight-bold text-center" scope="col" style="width: 5%">
-            <!-- <input
-        type="checkbox"
-        v-model="allCompleted"
-        @change="toggleAllCompleted"
-      /> -->
-            #
-          </th>
-          <th class="font-weight-bold text-center" scope="col" style="width: 60%">
-            Tugas
-          </th>
-          <th class="font-weight-bold text-center" style="cursor: pointer; width: 15%" scope="col" @click="sortByDeadline">
-            Deadline
-          </th>
-          <th class="font-weight-bold text-center" scope="col" style="width: 15%">
-            Aksi
-            <!-- <button
-        v-if="tasks.filter(task => task.completed).length > 1"
-        @click="archiveCompletedTasks"
-      >
-        Arsipkan Semua
-      </button> -->
-          </th>
-          <th class="font-weight-bold text-center" scope="col" style="width: 10%">
-            #
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(task, index) in archivedTasks" :key="index" :class="{ pink: isToday(task.deadline), orange: isTomorrow(task.deadline), salmon: isTwoDaysLater(task.deadline) }">
-          <td>
-            <!-- <input
-                type="checkbox"
-                v-model="task.completed"
-                @change="updateLocalStorage"
-                class="form-check-input"
-              /> -->
-          </td>
-          <td :class="{ 'text-decoration-line-through': task.completed }">
-            {{ task.title }}
-          </td>
-          <td :class="{ 'text-decoration-line-through': task.completed }">
-            {{ task.deadline }}
-          </td>
-          <td class="text-center">
-            <!-- <button v-if="!task.completed" @click="editTask(task)">Edit</button>
-                        <button v-if="!task.completed" @click="removeTask(index)">Hapus</button>
-                        <button v-if="task.completed" @click="archiveTask(index)">Arsipkan</button> -->
-            <button @click="activateTask(index)">Aktifkan</button>
-          </td>
-          <td>
-            <!-- <button @click="moveTaskUp(index)">▲</button>
-              <button @click="moveTaskDown(index)">▼</button> -->
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <!-- <ul>
-            <li v-for="(task, index) in tasks" :key="index">
-                {{ task.title }} (deadline: {{ task.deadline }})
-                <button @click="editTask(task)">Edit</button>
-                <button @click="removeTask(index)">Hapus</button>
-            </li>
-        </ul> -->
-  </div>
-  <!-- tambahkan Vue.js -->
-  <script>
-    new Vue({
-      el: "#app",
-      data: {
-        tasks: [],
-        archivedTasks: [],
-        newTask: {
-          title: "",
-          deadline: "",
-        },
-        isEditing: false,
-        editingTask: {},
-        sortOrder: "asc",
-        showTasks: true,
-        allCompleted: false,
-      },
-      methods: {
-        addTask() {
-          if (this.newTask.title === "") {
-            alert("Tugas tidak boleh kosong");
-          } else {
-            // tambahkan tugas baru ke daftar tugas
-            const id = Date.now();
-            this.tasks.push({ id, ...this.newTask });
-            //   this.tasks.push(this.newTask);
-            // simpan daftar tugas ke Local Storage
-            localStorage.setItem("tasks", JSON.stringify(this.tasks));
-            // reset form
-            this.newTask = { title: "", deadline: "" };
-            this.$refs.newTaskTitle.focus();
-            this.updateLocalStorage();
-            this.sortOrder = "desc";
-            this.sortByDeadline();
-          }
-        },
-        removeTask(index) {
-          if (confirm("Apakah Anda yakin ingin menghapus tugas ini?")) {
-            // hapus tugas dari daftar tugas
-            this.tasks.splice(index, 1);
-            // simpan daftar tugas ke Local Storage
-            localStorage.setItem("tasks", JSON.stringify(this.tasks));
-          }
-        },
+    <script>
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    username: localStorage.getItem('username'),
+                    password: localStorage.getItem('password'),
+                    todos: [],
+                    showForm: false,
+                    newTodo: {
+                        task: '',
+                        deadline: '',
+                        monthly: false
+                    },
+                    // showAddTodoForm: false,
+                    showSidebar: false,
+                    kiri: 'w-full ',
+                    kanan: 'w-1/2 bg-red-300',
+                    tampilkanArsip: false,
+                    status: 1,
+                    dipilih: '99999',
+                    isLoading: false,
 
-        // removeTask(index) {
-
-        //     // hapus tugas dari daftar tugas
-        //     this.tasks.splice(index, 1);
-        //     // simpan daftar tugas ke Local Storage
-        //     localStorage.setItem('tasks', JSON.stringify(this.tasks));
-        // },
-        editTask(task) {
-          // masuk ke mode edit
-          this.isEditing = true;
-          // simpan data tugas yang akan diedit ke variabel editingTask
-          this.editingTask = task;
-        },
-        updateTask() {
-          // cari indeks tugas yang sedang diedit
-          const index = this.tasks.indexOf(this.editingTask);
-          // ganti data tugas dengan data yang baru
-          this.tasks.splice(index, 1, this.editingTask);
-          // simpan daftar tugas ke Local Storage
-          localStorage.setItem("tasks", JSON.stringify(this.tasks));
-          // keluar dari mode edit
-          this.isEditing = false;
-          this.sortOrder = "desc";
-          this.sortByDeadline();
-        },
-        cancelEdit() {
-          // keluar dari mode edit
-          this.isEditing = false;
-        },
-        sortByDeadline() {
-          // ubah arah sorting
-          this.sortOrder = this.sortOrder === "asc" ? "desc" : "asc";
-          // urutkan daftar tugas berdasarkan deadline
-          this.tasks.sort((a, b) => {
-            // jika sortOrder adalah 'asc', lakukan sorting ascending
-            if (this.sortOrder === "asc") {
-              // jika deadline a lebih awal dari deadline b, return -1
-              if (a.deadline < b.deadline) return -1;
-              // jika deadline a sama dengan deadline b, return 0
-              if (a.deadline === b.deadline) return 0;
-              // jika deadline a lebih akhir dari deadline b, return 1
-              if (a.deadline > b.deadline) return 1;
-            } else {
-              // jika sortOrder adalah 'desc', lakukan sorting descending
-              // jika deadline a lebih akhir dari deadline b, return -1
-              if (a.deadline > b.deadline) return -1;
-              // jika deadline a sama dengan deadline b, return 0
-              if (a.deadline === b.deadline) return 0;
-              // jika deadline a lebih awal dari deadline b, return 1
-              if (a.deadline < b.deadline) return 1;
+                }
             }
-          });
-        },
-        isToday(deadline) {
-          // ubah tanggal deadline menjadi Date object
-          const deadlineDate = new Date(deadline);
-          // ubah tanggal hari ini menjadi Date object
-          const today = new Date();
-          // bandingkan tanggal deadline dengan tanggal hari ini
-          return deadlineDate.toDateString() === today.toDateString();
-        },
-        isTomorrow(deadline) {
-          // ubah tanggal deadline menjadi Date object
-          const deadlineDate = new Date(deadline);
-          // ubah tanggal hari ini menjadi Date object
-          const today = new Date();
-          // tambahkan satu hari ke tanggal hari ini
-          const tomorrow = new Date(today);
-          tomorrow.setDate(tomorrow.getDate() + 1);
-          // bandingkan tanggal deadline dengan tanggal besok
-          return deadlineDate.toDateString() === tomorrow.toDateString();
-        },
-        isTwoDaysLater(deadline) {
-          // ubah tanggal deadline menjadi Date object
-          const deadlineDate = new Date(deadline);
-          // ubah tanggal hari ini menjadi Date object
-          const today = new Date();
-          // tambahkan dua hari ke tanggal hari ini
-          const twoDaysLater = new Date(today);
-          twoDaysLater.setDate(twoDaysLater.getDate() + 2);
-          // bandingkan tanggal deadline dengan tanggal dua hari kemudian
-          return deadlineDate.toDateString() === twoDaysLater.toDateString();
-        },
-        updateLocalStorage() {
-          localStorage.setItem("tasks", JSON.stringify(this.tasks));
-          localStorage.setItem(
-            "archivedTasks",
-            JSON.stringify(this.archivedTasks)
-          );
+            ,
+            computed: {
 
-          // Tambahkan informasi tanggal selesai pada task yang sudah di-check, dan hapus informasi tanggal selesai pada task yang sudah tidak di-check
-          this.tasks.forEach((task) => {
-            if (task.completed && !task.completedDate) {
-              task.completedDate = new Date().toLocaleDateString();
-            } else if (!task.completed && task.completedDate) {
-              delete task.completedDate;
-            }
-          });
-        },
-        moveTaskUp(index) {
-          if (index > 0) {
-            const task = this.tasks[index];
-            this.tasks.splice(index, 1);
-            this.tasks.splice(index - 1, 0, task);
-            this.updateLocalStorage();
-          }
-        },
-        moveTaskDown(index) {
-          if (index < this.tasks.length - 1) {
-            const task = this.tasks[index];
-            this.tasks.splice(index, 1);
-            this.tasks.splice(index + 1, 0, task);
-            this.updateLocalStorage();
-          }
-        },
-        showDatepicker() {
-          this.$refs.newTaskDeadline.click();
-          console.log("tanggal");
-        },
-        archiveTask(index) {
-          const task = this.tasks.splice(index, 1)[0];
-          this.archivedTasks.push(task);
-          this.updateLocalStorage();
-        },
-        activateTask(index) {
-          const task = this.archivedTasks.splice(index, 1)[0];
-          this.tasks.push(task);
-          this.updateLocalStorage();
-        },
+                TaskAktif: function () {
+                    return this.todos.filter((blog) => {
+                        return blog.col5 == this.status && blog.col2 == this.username;
+                    });
 
-        archiveCompletedTasks() {
-          this.archivedTasks.push(
-            ...this.tasks.filter((task) => task.completed)
-          );
-          // Menghapus task yang sudah completed dari array tasks
-          this.tasks = this.tasks.filter((task) => !task.completed);
-          this.updateLocalStorage();
-        },
-        toggleAllCompleted() {
-          // Mengubah status completed semua task menjadi sama dengan allCompleted
-          this.tasks.forEach((task) => (task.completed = this.allCompleted));
-          this.updateLocalStorage();
-        },
-      },
-      created() {
-        // cek apakah ada daftar tugas di Local Storage
-        if (localStorage.getItem("tasks")) {
-          // jika ada, ambil daftar tugas dari Local Storage
-          // this.tasks = JSON.parse(localStorage.getItem('tasks'));
-          this.tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-          this.archivedTasks =
-            JSON.parse(localStorage.getItem("archivedTasks")) || [];
-        }
-        this.sortOrder = "desc";
-        this.sortByDeadline();
-        // this.$refs.newTaskTitle.focus();
-      },
-    });
-  </script>
+                },
+                sortedTasks() {
+                    return this.TaskAktif.sort((a, b) => {
+                        return new Date(a.col4) - new Date(b.col4);
+                    });
+                },
+            },
+            methods: {
+                tandaiSelesai(x) {
+                    // alert('update')
+                    // var waktu1 = Date.now();
+                    if (x.col7 == true) {
+                        var itimestamp = x.id;
+                        console.log(itimestamp);
+                        var url = `https://script.google.com/macros/s/AKfycbzfOmAEsUqWORVFgVgp3-juYufE-2xrp5hn85E2hZT0hXLw8_Ur-9sxY1eCDQLo8mJI/exec?action=update&table=todo2023&id=${itimestamp}&data={"col7":true}`
+                        // this.test = url;
+                        // timestamp=${itimestamp}
+                        let app = this;
+                        $.ajax({
+                            type: 'GET',
+                            url: url,
+                            crossDomain: true,
+                            dataType: 'jsonp',
+                            dataType: "text",
+                            success: function (resultData) {
+                                // alert('Task dipindahkan ke Arsip')
+                                // app.GetDataTasks();
+                                console.log('berhasil selesai')
+
+
+                            }
+                        });
+
+                    } else {
+                        var itimestamp = x.id;
+                        console.log(itimestamp);
+                        var url = `https://script.google.com/macros/s/AKfycbzfOmAEsUqWORVFgVgp3-juYufE-2xrp5hn85E2hZT0hXLw8_Ur-9sxY1eCDQLo8mJI/exec?action=update&table=todo2023&id=${itimestamp}&data={"col7":false}`
+                        // this.test = url;
+                        // timestamp=${itimestamp}
+                        let app = this;
+                        $.ajax({
+                            type: 'GET',
+                            url: url,
+                            crossDomain: true,
+                            dataType: 'jsonp',
+                            dataType: "text",
+                            success: function (resultData) {
+                                // alert('Task dipindahkan ke Arsip')
+                                // app.GetDataTasks();
+                                console.log('berhasil selesai')
+
+                            }
+                        });
+
+                    }
+                },
+                showAddTodoForm() {
+                    this.showSidebar = true
+                    // this.kiri = "w-1/2"
+                    // this.kanan = "w-1/2"
+                    // alert('oke')
+                },
+                closeAddTodoForm() {
+                    this.showSidebar = false
+                    this.kiri = "w-full"
+                    // this.kanan = "w-1/3"
+                    // alert('oke')
+                },
+                logout() {
+                    localStorage.removeItem('username');
+                    localStorage.removeItem('password');
+                    window.location.href = 'login.html';
+                },
+                saveTodo() {
+                    this.isLoading = true;
+                    if (this.newTodo.task) {
+
+                        var waktu1 = Date.now();
+                        var a1 = encodeURIComponent(this.newTodo.task.toString());
+                        var a2 = this.newTodo.deadline.toString();
+                        var a3 = this.newTodo.monthly.toString();
+                        var a4 = this.username.toString();
+                        var a5 = 1;
+                        var lin = `https://script.google.com/macros/s/AKfycbzfOmAEsUqWORVFgVgp3-juYufE-2xrp5hn85E2hZT0hXLw8_Ur-9sxY1eCDQLo8mJI/exec?action=insert&table=todo2023&data={"id":${waktu1}, "col2":"'${a4}","col3":"'${a1}","col4":"'${a2}","col5":"${a5} ","col6":"${a3}","col7":"false"}`;
+                        // this.test = lin;
+                        let app = this;
+                        $.ajax({
+                            type: 'GET',
+                            url: lin,
+                            crossDomain: true,
+                            dataType: 'jsonp',
+                            dataType: "text",
+                            success: function (resultData) {
+                                //   alert("Save Complete");
+                                app.newTodo.task = ''
+                                app.newTodo.deadline = ''
+                                app.newTodo.monthly = false
+                                app.isLoading = false;
+                                // app.GetDataTasks();
+                            }
+                        });
+
+                        alert('Task Berhasil di Simpan')
+                        app.GetDataTasks();
+                    }
+                    else {
+                        alert('Masih terdapat data yang belum di input')
+                    }
+                },
+                GetDataTasks() {
+                    this.isLoading = true;
+                    this.todos = [];
+                    this.queryUser();
+                    // var url ="https://script.google.com/macros/s/AKfycbyc7wzSrUGxQhcBN5EfVC-rNRj3wncZJOVTWAChXtSwnrHkGjoaoI91bggme_fUOIP9/exec?action=read&table=query";
+                    var url = "https://script.google.com/macros/s/AKfycbzfOmAEsUqWORVFgVgp3-juYufE-2xrp5hn85E2hZT0hXLw8_Ur-9sxY1eCDQLo8mJI/exec?action=read&table=todo2023";
+
+                    let app = this;
+                    $.getJSON(url, function (json) {
+                        // console.log(json.data);
+                        app.todos = json.data;
+                        app.isLoading = false;
+                    });
+                },
+                hapusTask(aa) {
+                    this.isLoading = true;
+                    // this.todos = [];
+                    // alert('update')
+                    // var waktu1 = Date.now();
+                    var itimestamp = aa.id;
+                    console.log(itimestamp);
+                    var url = `https://script.google.com/macros/s/AKfycbzfOmAEsUqWORVFgVgp3-juYufE-2xrp5hn85E2hZT0hXLw8_Ur-9sxY1eCDQLo8mJI/exec?action=update&table=todo2023&id=${itimestamp}&data={"col5":0}`
+                    // this.test = url;
+                    // timestamp=${itimestamp}
+                    let app = this;
+                    $.ajax({
+                        type: 'GET',
+                        url: url,
+                        crossDomain: true,
+                        dataType: 'jsonp',
+                        dataType: "text",
+                        success: function (resultData) {
+                            // alert('Task Dihapus')
+                            app.GetDataTasks();
+
+                        }
+                    });
+
+                },
+                selesaiTask(aa) {
+                    this.isLoading = true;
+                    // alert('update')
+                    // var waktu1 = Date.now();
+                    var itimestamp = aa.id;
+                    console.log(itimestamp);
+                    var url = `https://script.google.com/macros/s/AKfycbzfOmAEsUqWORVFgVgp3-juYufE-2xrp5hn85E2hZT0hXLw8_Ur-9sxY1eCDQLo8mJI/exec?action=update&table=todo2023&id=${itimestamp}&data={"col5":2}`
+                    // this.test = url;
+                    // timestamp=${itimestamp}
+                    let app = this;
+                    $.ajax({
+                        type: 'GET',
+                        url: url,
+                        crossDomain: true,
+                        dataType: 'jsonp',
+                        dataType: "text",
+                        success: function (resultData) {
+                            // alert('Task dipindahkan ke Arsip')
+                            app.GetDataTasks();
+
+                        }
+                    });
+
+                },
+                aktifkan(aa) {
+                    this.isLoading = true;
+                    // alert('update')
+                    // var waktu1 = Date.now();
+                    var itimestamp = aa.id;
+                    console.log(itimestamp);
+                    var url = `https://script.google.com/macros/s/AKfycbzfOmAEsUqWORVFgVgp3-juYufE-2xrp5hn85E2hZT0hXLw8_Ur-9sxY1eCDQLo8mJI/exec?action=update&table=todo2023&id=${itimestamp}&data={"col5":1}`
+                    // this.test = url;
+                    // timestamp=${itimestamp}
+                    let app = this;
+                    $.ajax({
+                        type: 'GET',
+                        url: url,
+                        crossDomain: true,
+                        dataType: 'jsonp',
+                        dataType: "text",
+                        success: function (resultData) {
+                            // alert('Task dipindahkan ke Arsip')
+                            app.GetDataTasks();
+
+                        }
+                    });
+                },
+                queryUser() {
+                    // alert('update')
+                    // var waktu1 = Date.now();
+                    var a1 = this.username.toString();
+                    // console.log(itimestamp);
+                    var url = `https://script.google.com/macros/s/AKfycbzfOmAEsUqWORVFgVgp3-juYufE-2xrp5hn85E2hZT0hXLw8_Ur-9sxY1eCDQLo8mJI/exec?action=update&table=pengguna&id=1&data={"col2":"${a1}"}`
+                    // this.test = url;
+                    // timestamp=${itimestamp}
+                    let app = this;
+                    $.ajax({
+                        type: 'GET',
+                        url: url,
+                        crossDomain: true,
+                        dataType: 'jsonp',
+                        dataType: "text",
+                        success: function (resultData) {
+                            console.log('berhasil ganti user')
+                            // alert('Task dipindahkan ke Arsip')
+                            // app.GetDataTasks();
+
+                        }
+                    });
+
+                },
+
+            },
+            created() {
+                if (!localStorage.getItem("username") || !localStorage.getItem("password")) {
+                    window.location.href = "/todo/login.html";
+                }
+                this.queryUser();
+                this.GetDataTasks();
+            },
+
+        });
+    </script>
 </body>
 
 </html>
