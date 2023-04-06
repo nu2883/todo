@@ -34,7 +34,7 @@
 
         <nav class="navbar  navbar-expand-lg fixed-top text-black-900 bg-purple-600 ">
             <div class="container">
-                <a class="navbar-brand text-white font-bold sm:text-small" href="#">Todo : {{ username }} !</a>
+                <a class="navbar-brand text-white font-bold lg:text-2xl" href="#">Todo : {{ username }} !</a>
                 <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -44,7 +44,7 @@
 
                     <form class="form-inline my-2 my-lg-0">
                         <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"> -->
-                        <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
+                        <button class="bg-red-600 hover:bg-red-700 lg:text-2xl text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
                             @click="logout()">Logout</button>
                     </form>
                 </div>
@@ -63,14 +63,14 @@
             <div class="d-flex justify-content-between ">
                 <button data-toggle="modal" data-target="#exampleModal" @click="showAddTodoForm" type="button" type="button" data-toggle="modal"
                     data-target="#exampleModal" @click="showAddTodoForm" class="bg-purple-600 hover:bg-purple-700
-                text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">Tambah Task</button>
+                text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline lg:text-2xl">Tambah Task</button>
                 <div>
                     <button v-if="!tampilkanArsip" class="bg-cyan-500 hover:bg-cyan-700
-                text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline" type="button" @click="tampilkanArsip=!tampilkanArsip; status=2;">
+                text-white font-bold py-2 px-4 rounded-full lg:text-2xl focus:outline-none focus:shadow-outline" type="button" @click="tampilkanArsip=!tampilkanArsip; status=2;">
                         Tampilkan Arsip Task
                     </button>
 
-                    <button v-if="tampilkanArsip" class="bg-cyan-600 hover:bg-cyan-700
+                    <button v-if="tampilkanArsip" class="bg-cyan-600 hover:bg-cyan-700 lg:text-2xl
                 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline" type="button" @click="tampilkanArsip=!tampilkanArsip; status=1;">
                         Tampilkan Task
                     </button>
@@ -84,8 +84,8 @@
                 </div>
             </div>
 
-            <div v-if="!tampilDetail" class="container mt-3">
-                <div class="container">
+            <div v-if="!tampilDetail" class=" mt-3">
+                <div class="">
                     <div style="width:100%;">
                         <div class="mt-1" v-for="item in taskGroups" :key="item.id">
                             <table style="width:100%;">
@@ -113,7 +113,7 @@
 
 
 
-            <div v-else class="container w-full overflow-auto">
+            <div v-else class=" w-full overflow-auto">
                 <table class="table table-hover mt-3 table-responsive ">
                     <thead>
                         <tr width="100%">
@@ -130,7 +130,7 @@
                                 />
                             </th>
                             <td>
-                                <span :class="todo.col7 ? 'line-through font-bdivd text-2xl mb-3 ' : 'font-bdivd text-2xl mb-3 '">
+                                <span :class="todo.col7 ? 'line-through font-bdivd lg:text-2xl mb-3 ' : 'font-bdivd lg:text-2xl mb-3 '">
                                     {{todo.col3}}
                                 </span>
                                 <div class="mt-3" v-if="dipilih == index">
@@ -158,7 +158,7 @@
                                 </div>
                             </td>
                             <td>
-                                <span class="font-bdivd text-2xl" v-if="todo.col4"> {{todo.col4}}</span>
+                                <span class="font-bdivd lg:text-2xl" v-if="todo.col4"> {{todo.col4}}</span>
                             </td>
 
                         </tr>
@@ -539,11 +539,11 @@
                     } else if (diffInDays === 0) {
                         return 'bg-red-500';
                     } else if (diffInDays === 1) {
-                        return 'bg-orange-500';
+                        return 'bg-orange-400';
                     } else if (diffInDays === 2) {
                         return 'bg-amber-400';
                     } else if (diffInDays === 3) {
-                        return 'bg-yellow-200';
+                        return 'bg-yellow-300';
                     } else if (diffInDays === 4) {
                         return 'bg-cyan-400';
                     } else if (diffInDays === 5) {
@@ -562,9 +562,9 @@
                     if (diffInDays < 0) {
                         return 'bg-gray-100';
                     } else if (diffInDays === 0) {
-                        return 'bg-red-200';
+                        return 'bg-red-300';
                     } else if (diffInDays === 1) {
-                        return 'bg-orange-300';
+                        return 'bg-orange-200';
                     } else if (diffInDays === 2) {
                         return 'bg-amber-200';
                     } else if (diffInDays === 3) {
