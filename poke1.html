@@ -63,6 +63,25 @@
             <div class="modal-body">
               <button
                 class="btn btn-xs btn-warning mx-1 my-1"
+                v-for="item,index in pokeAnda"
+                @click="removePokemon(item)"
+              >
+                {{item.name}} : [
+                <span v-if="item.types" v-for="aa,index in item.types"
+                  >{{aa}}
+                </span>
+                ]
+              </button>
+
+              <div class="row text-center">
+                <input
+                  type="text"
+                  placeholder="cari nama poke kamu"
+                  v-model="namaPoke"
+                />
+              </div>
+              <button
+                class="btn btn-xs btn-warning mx-1 my-1"
                 v-for="item,index in filteredPokemonList"
                 @click="removePokemon(item)"
               >
@@ -127,6 +146,24 @@
               ></button>
             </div>
             <div class="modal-body">
+              <button
+                class="btn btn-xs btn-warning mx-1 my-1"
+                v-for="item,index in pokeLawan"
+                @click="removePokemon(item)"
+              >
+                {{item.name}} : [
+                <span v-if="item.types" v-for="aa,index in item.types"
+                  >{{aa}}
+                </span>
+                ]
+              </button>
+              <div class="row text-center">
+                <input
+                  type="text"
+                  placeholder="cari nama poke kamu"
+                  v-model="namaPoke"
+                />
+              </div>
               <button
                 class="btn btn-xs btn-warning mx-1 my-1"
                 v-for="item,index in filteredPokemonList"
@@ -274,15 +311,6 @@
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="row text-center">
-        <input
-          type="text"
-          placeholder="cari nama poke kamu"
-          v-model="namaPoke"
-        />
-        <h1>{{namaPoke}}</h1>
       </div>
 
       <!-- <div class="container">
@@ -1103,12 +1131,14 @@
           removePokemon(pokemon) {
             // this.selectedPokemonNumbers.push(pokemon.number); // Menambahkan nomor Pokemon ke selectedPokemonNumbers
             this.pokeAnda.push(pokemon);
+            this.namaPoke = "";
           },
 
           removePokemon1(pokemon) {
             // this.selectedPokemonNumbers.push(pokemon.number); // Menambahkan nomor Pokemon ke selectedPokemonNumbers
 
             this.pokeLawan.push(pokemon);
+            this.namaPoke = "";
           },
           hapusPilih() {
             // this.pokeDipilih = [];
