@@ -29,317 +29,370 @@
         />
       </h1>
 
-      <!-- {{pokeAnda}} -->
-      <button
-        type="button"
-        class="btn btn-primary my-2"
-        data-bs-toggle="modal"
-        data-bs-target="#exampleModalPokeKamu"
-      >
-        pilih poke kamu
-      </button>
+      <div class="row">
+        <div class="col-lg-9 col-12">
+          <!-- {{pokeAnda}} -->
+          <button
+            type="button"
+            class="btn btn-primary my-2"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModalPokeKamu"
+          >
+            pilih poke kamu
+          </button>
 
-      <!-- Modal Poke kamu-->
-      <div
-        class="modal fade"
-        id="exampleModalPokeKamu"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">
-                Pilih Poke Kamu
-              </h1>
-              <button
-                @click="namaPoke=''"
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <button
-                class="btn btn-xs btn-warning mx-1 my-1"
-                v-for="item,index in pokeAnda"
-                @click="hapusPokeAnda(item)"
-              >
-                {{item.name}} : [
-                <span v-if="item.types" v-for="aa,index in item.types"
-                  >{{aa}}
-                </span>
-                ]
-              </button>
+          <!-- Modal Poke kamu-->
+          <div
+            class="modal fade"
+            id="exampleModalPokeKamu"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">
+                    Pilih Poke Kamu
+                  </h1>
+                  <button
+                    @click="namaPoke=''"
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <button
+                    class="btn btn-sm btn-warning mx-1 my-1"
+                    v-for="item,index in pokeAnda"
+                    @click="hapusPokeAnda(item)"
+                  >
+                    {{item.name}} : [
+                    <span v-if="item.types" v-for="aa,index in item.types"
+                      >{{aa}}
+                    </span>
+                    ]
+                  </button>
 
-              <div class="row text-center">
-                <input
-                  type="text"
-                  placeholder="cari nama poke kamu"
-                  v-model="namaPoke"
-                />
+                  <div class="row text-center">
+                    <input
+                      ref="inputElement1"
+                      type="text"
+                      placeholder="cari nama poke kamu"
+                      v-model="namaPoke"
+                    />
+                  </div>
+                  <button
+                    class="btn btn-sm btn-warning mx-1 my-1"
+                    v-for="item,index in filteredPokemonList"
+                    @click="removePokemon(item)"
+                  >
+                    {{item.number}}. {{item.name}}
+                  </button>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </div>
               </div>
-              <button
-                class="btn btn-xs btn-warning mx-1 my-1"
-                v-for="item,index in filteredPokemonList"
-                @click="removePokemon(item)"
-              >
-                {{item.number}}. {{item.name}}
-              </button>
             </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Close
-              </button>
+          </div>
+
+          Poke Kamu :
+          <button
+            class="btn btn-sm btn-warning mx-1 my-1"
+            v-for="item,index in pokeAnda"
+            @click="hapusPokeAnda(item)"
+          >
+            {{item.name}} : [
+            <span v-if="item.types" v-for="aa,index in item.types"
+              >{{aa}}
+            </span>
+            ]
+          </button>
+
+          <br />
+          <button
+            type="button"
+            class="btn btn-danger my-2"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModalPokeLawan"
+          >
+            pilih poke Lawan
+          </button>
+
+          <!-- Modal Poke lawan-->
+          <div
+            class="modal fade"
+            id="exampleModalPokeLawan"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">
+                    Pilih Poke Lawan
+                  </h1>
+                  <button
+                    @click="namaPoke=''"
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <button
+                    v-if="pokeLawan.length > 0"
+                    class="btn btn-sm btn-warning mx-1 my-1"
+                    v-for="item,index in pokeLawan"
+                    @click="hapusPokeLawan(item)"
+                  >
+                    {{item.name}} : [
+                    <span v-if="item.types" v-for="aa,index in item.types"
+                      >{{aa}}
+                    </span>
+                    ]
+                  </button>
+                  <div class="row text-center">
+                    <input
+                      ref="inputElement2"
+                      type="text"
+                      placeholder="cari nama poke kamu"
+                      v-model="namaPoke"
+                    />
+                  </div>
+                  <button
+                    class="btn btn-sm btn-warning mx-1 my-1"
+                    v-for="item,index in filteredPokemonList"
+                    @click="removePokemon2(item)"
+                  >
+                    {{item.number}}. {{item.name}}
+                  </button>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          Poke Lawan :
+          <button
+            v-if="pokeLawan.length >0"
+            class="btn btn-sm btn-warning mx-1 my-1"
+            v-for="item,index in pokeLawan"
+            @click="hapusPokeLawan(item)"
+          >
+            {{item.name}} : [
+            <span v-if="item.types" v-for="aa,index in item.types"
+              >{{aa}}
+            </span>
+            ]
+          </button>
+
+          <hr />
+
+          <h5>Analisis Poke Lawan :</h5>
+
+          <div class="row" v-if="pokeLawan.length > 0">
+            <div class="row">
+              <div class="col row">
+                <div class="col-3">
+                  <button class="btn btn-danger btn-sm mx-2">
+                    {{pokeLawan[0].name}}
+                  </button>
+                  <br />
+                  {{pokeLawan[0].types}}
+                </div>
+                <div class="col-9">
+                  <div class="row my-2" v-if="lawan1superEfektif">
+                    <div class="col">
+                      super efektif : {{lawan1superEfektif}}
+                    </div>
+                    <div class="col">
+                      <button
+                        class="btn btn-success btn-sm mx-2"
+                        v-for="item in vs1SuperEfektif"
+                      >
+                        {{item.name}}
+                      </button>
+                    </div>
+                  </div>
+                  <div class="row my-2">
+                    <div class="col">Normal : {{lawan1normal}}</div>
+                    <div class="col">
+                      <button
+                        class="btn btn-secondary btn-sm mx-2"
+                        v-for="item in vs1Normal"
+                      >
+                        {{item.name}}
+                      </button>
+                    </div>
+                  </div>
+                  <div class="row my-2">
+                    <div class="col">
+                      not very efektif : {{lawan1notVeryEfektif}}
+                    </div>
+                    <div class="col"></div>
+                  </div>
+                  <div class="row my-2">
+                    <div class="col">no effek : {{lawan1noEffect}}</div>
+                    <div class="col"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr />
+            <div class="row" v-if="pokeLawan.length > 1">
+              <div class="col row">
+                <div class="col-3">
+                  <button class="btn btn-danger btn-sm mx-2">
+                    {{pokeLawan[1].name}}
+                  </button>
+                  <br />
+                  {{pokeLawan[1].types}}
+                </div>
+                <div class="col-9">
+                  <div class="row my-2" v-if="lawan2superEfektif">
+                    <div class="col">
+                      super efektif : {{lawan2superEfektif}}
+                    </div>
+                    <div class="col">
+                      <button
+                        class="btn btn-success btn-sm mx-2"
+                        v-for="item in vs2SuperEfektif"
+                      >
+                        {{item.name}}
+                      </button>
+                    </div>
+                  </div>
+                  <div class="row my-2">
+                    <div class="col">Normal : {{lawan2normal}}</div>
+                    <div class="col">
+                      <button
+                        class="btn btn-secondary btn-sm mx-2"
+                        v-for="item in vs2Normal"
+                      >
+                        {{item.name}}
+                      </button>
+                    </div>
+                  </div>
+                  <div class="row my-2">
+                    <div class="col">
+                      not very efektif : {{lawan1notVeryEfektif}}
+                    </div>
+                    <div class="col"></div>
+                  </div>
+                  <div class="row my-2">
+                    <div class="col">no effek : {{lawan1noEffect}}</div>
+                    <div class="col"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr />
+            <div class="row" v-if="pokeLawan.length > 2">
+              <div class="col row">
+                <div class="col-3">
+                  <button class="btn btn-danger btn-sm mx-2">
+                    {{pokeLawan[2].name}}
+                  </button>
+                  <br />
+                  {{pokeLawan[2].types}}
+                </div>
+                <div class="col-9">
+                  <div class="row my-2" v-if="lawan3superEfektif">
+                    <div class="col">
+                      super efektif : {{lawan3superEfektif}}
+                    </div>
+                    <div class="col">
+                      <button
+                        class="btn btn-success btn-sm mx-2"
+                        v-for="item in vs3SuperEfektif"
+                      >
+                        {{item.name}}
+                      </button>
+                    </div>
+                  </div>
+                  <div class="row my-2">
+                    <div class="col">Normal : {{lawan3normal}}</div>
+                    <div class="col">
+                      <button
+                        class="btn btn-secondary btn-sm mx-2"
+                        v-for="item in vs3Normal"
+                      >
+                        {{item.name}}
+                      </button>
+                    </div>
+                  </div>
+                  <div class="row my-2">
+                    <div class="col">
+                      not very efektif : {{lawan1notVeryEfektif}}
+                    </div>
+                    <div class="col"></div>
+                  </div>
+                  <div class="row my-2">
+                    <div class="col">no effek : {{lawan1noEffect}}</div>
+                    <div class="col"></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+        <div class="col-lg-3 d-none d-lg-block" v-if="pokeAnda.length>=3">
+          <h4>pilih Poke Lawan samping</h4>
 
-      Poke Kamu :
-      <button
-        class="btn btn-xs btn-warning mx-1 my-1"
-        v-for="item,index in pokeAnda"
-        @click="hapusPokeAnda(item)"
-      >
-        {{item.name}} : [
-        <span v-if="item.types" v-for="aa,index in item.types">{{aa}} </span> ]
-      </button>
-
-      <br />
-      <button
-        type="button"
-        class="btn btn-danger my-2"
-        data-bs-toggle="modal"
-        data-bs-target="#exampleModalPokeLawan"
-      >
-        pilih poke Lawan
-      </button>
-
-      <!-- Modal Poke lawan-->
-      <div
-        class="modal fade"
-        id="exampleModalPokeLawan"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">
-                Pilih Poke Lawan
-              </h1>
-              <button
-                @click="namaPoke=''"
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <button
-                v-if="pokeLawan.length > 0"
-                class="btn btn-xs btn-warning mx-1 my-1"
-                v-for="item,index in pokeLawan"
-                @click="hapusPokeLawan(item)"
-              >
-                {{item.name}} : [
-                <span v-if="item.types" v-for="aa,index in item.types"
-                  >{{aa}}
-                </span>
-                ]
-              </button>
-              <div class="row text-center">
-                <input
-                  type="text"
-                  placeholder="cari nama poke kamu"
-                  v-model="namaPoke"
-                />
-              </div>
-              <button
-                class="btn btn-xs btn-warning mx-1 my-1"
-                v-for="item,index in filteredPokemonList"
-                @click="removePokemon1(item)"
-              >
-                {{item.number}}. {{item.name}}
-              </button>
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Close
-              </button>
-            </div>
+          <!-- <button
+            v-if="pokeLawan.length > 0"
+            class="btn btn-sm btn-warning mx-1 my-1"
+            v-for="item,index in pokeLawan"
+            @click="hapusPokeLawan(item)"
+          >
+            {{item.name}} : [
+            <span v-if="item.types" v-for="aa,index in item.types"
+              >{{aa}}
+            </span>
+            ]
+          </button> -->
+          <div class="row text-center">
+            <input
+              ref="inputElement"
+              autofocus
+              type="text"
+              placeholder="cari nama poke kamu"
+              v-model="namaPoke"
+            />
           </div>
-        </div>
-      </div>
-
-      Poke Lawan :
-      <button
-        v-if="pokeLawan.length >0"
-        class="btn btn-xs btn-warning mx-1 my-1"
-        v-for="item,index in pokeLawan"
-        @click="hapusPokeLawan(item)"
-      >
-        {{item.name}} : [
-        <span v-if="item.types" v-for="aa,index in item.types">{{aa}} </span> ]
-      </button>
-
-      <h5>Analisis Poke Lawan :</h5>
-
-      <div class="row" v-if="pokeLawan.length > 0">
-        <div class="row">
-          <div class="col row">
-            <div class="col-3">
-              <button class="btn btn-danger btn-xs mx-2">
-                {{pokeLawan[0].name}}
-              </button>
-
-              {{pokeLawan[0].types}}
-            </div>
-            <div class="col-9">
-              <div class="row my-2" v-if="lawan1superEfektif">
-                <div class="col">super efektif : {{lawan1superEfektif}}</div>
-                <div class="col">
-                  <button
-                    class="btn btn-success btn-xs mx-2"
-                    v-for="item in vs1SuperEfektif"
-                  >
-                    {{item.name}}
-                  </button>
-                </div>
-              </div>
-              <div class="row my-2">
-                <div class="col">Normal : {{lawan1normal}}</div>
-                <div class="col">
-                  <button
-                    class="btn btn-secondary btn-xs mx-2"
-                    v-for="item in vs1Normal"
-                  >
-                    {{item.name}}
-                  </button>
-                </div>
-              </div>
-              <div class="row my-2">
-                <div class="col">
-                  not very efektif : {{lawan1notVeryEfektif}}
-                </div>
-                <div class="col"></div>
-              </div>
-              <div class="row my-2">
-                <div class="col">no effek : {{lawan1noEffect}}</div>
-                <div class="col"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <hr />
-        <div class="row" v-if="pokeLawan.length > 1">
-          <div class="col row">
-            <div class="col-3">
-              <button class="btn btn-danger btn-xs mx-2">
-                {{pokeLawan[1].name}}
-              </button>
-
-              {{pokeLawan[1].types}}
-            </div>
-            <div class="col-9">
-              <div class="row my-2" v-if="lawan2superEfektif">
-                <div class="col">super efektif : {{lawan2superEfektif}}</div>
-                <div class="col">
-                  <button
-                    class="btn btn-success btn-xs mx-2"
-                    v-for="item in vs2SuperEfektif"
-                  >
-                    {{item.name}}
-                  </button>
-                </div>
-              </div>
-              <div class="row my-2">
-                <div class="col">Normal : {{lawan2normal}}</div>
-                <div class="col">
-                  <button
-                    class="btn btn-secondary btn-xs mx-2"
-                    v-for="item in vs2Normal"
-                  >
-                    {{item.name}}
-                  </button>
-                </div>
-              </div>
-              <div class="row my-2">
-                <div class="col">
-                  not very efektif : {{lawan1notVeryEfektif}}
-                </div>
-                <div class="col"></div>
-              </div>
-              <div class="row my-2">
-                <div class="col">no effek : {{lawan1noEffect}}</div>
-                <div class="col"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <hr />
-        <div class="row" v-if="pokeLawan.length > 2">
-          <div class="col row">
-            <div class="col-3">
-              <button class="btn btn-danger btn-xs mx-2">
-                {{pokeLawan[2].name}}
-              </button>
-              {{pokeLawan[2].types}}
-            </div>
-            <div class="col-9">
-              <div class="row my-2" v-if="lawan3superEfektif">
-                <div class="col">super efektif : {{lawan3superEfektif}}</div>
-                <div class="col">
-                  <button
-                    class="btn btn-success btn-xs mx-2"
-                    v-for="item in vs3SuperEfektif"
-                  >
-                    {{item.name}}
-                  </button>
-                </div>
-              </div>
-              <div class="row my-2">
-                <div class="col">Normal : {{lawan3normal}}</div>
-                <div class="col">
-                  <button
-                    class="btn btn-secondary btn-xs mx-2"
-                    v-for="item in vs3Normal"
-                  >
-                    {{item.name}}
-                  </button>
-                </div>
-              </div>
-              <div class="row my-2">
-                <div class="col">
-                  not very efektif : {{lawan1notVeryEfektif}}
-                </div>
-                <div class="col"></div>
-              </div>
-              <div class="row my-2">
-                <div class="col">no effek : {{lawan1noEffect}}</div>
-                <div class="col"></div>
-              </div>
-            </div>
-          </div>
+          <button
+            class="btn btn-sm btn-warning mx-1 my-1"
+            v-for="item,index in filteredPokemonList"
+            @click="removePokemon1(item)"
+          >
+            {{item.number}}. {{item.name}}
+          </button>
         </div>
       </div>
 
       <!-- <div class="container">
         <button
-          class="btn btn-xs btn-warning mx-1 my-1"
+          class="btn btn-sm btn-warning mx-1 my-1"
           v-for="item,index in filteredPokemonList"
           @click="removePokemon(item)"
         >
@@ -868,9 +921,1094 @@
               { number: 299, name: "Nosepass", types: ["Rock"] },
               { number: 300, name: "Skitty", types: ["Normal"] },
 
-              { number: 699, name: "Aurorus", types: ["Rock", "Ice"] },
+              { number: 301, name: "Delcatty", types: ["Normal"] },
+              { number: 302, name: "Sableye", types: ["Dark", "Ghost"] },
+              { number: 303, name: "Mawile", types: ["Steel", "Fairy"] },
+              { number: 304, name: "Aron", types: ["Steel", "Rock"] },
+              { number: 305, name: "Lairon", types: ["Steel", "Rock"] },
+              { number: 306, name: "Aggron", types: ["Steel", "Rock"] },
+              { number: 307, name: "Meditite", types: ["Fighting", "Psychic"] },
+              { number: 308, name: "Medicham", types: ["Fighting", "Psychic"] },
+              { number: 309, name: "Electrike", types: ["Electric"] },
+              { number: 310, name: "Manectric", types: ["Electric"] },
+              { number: 311, name: "Plusle", types: ["Electric"] },
+              { number: 312, name: "Minun", types: ["Electric"] },
+              { number: 313, name: "Volbeat", types: ["Bug"] },
+              { number: 314, name: "Illumise", types: ["Bug"] },
+              { number: 315, name: "Roselia", types: ["Grass", "Poison"] },
+              { number: 316, name: "Gulpin", types: ["Poison"] },
+              { number: 317, name: "Swalot", types: ["Poison"] },
+              { number: 318, name: "Carvanha", types: ["Water", "Dark"] },
+              { number: 319, name: "Sharpedo", types: ["Water", "Dark"] },
+              { number: 320, name: "Wailmer", types: ["Water"] },
+              { number: 321, name: "Wailord", types: ["Water"] },
+              { number: 322, name: "Numel", types: ["Fire", "Ground"] },
+              { number: 323, name: "Camerupt", types: ["Fire", "Ground"] },
+              { number: 324, name: "Torkoal", types: ["Fire"] },
+              { number: 325, name: "Spoink", types: ["Psychic"] },
+              { number: 326, name: "Grumpig", types: ["Psychic"] },
+              { number: 327, name: "Spinda", types: ["Normal"] },
+              { number: 328, name: "Trapinch", types: ["Ground"] },
+              { number: 329, name: "Vibrava", types: ["Ground", "Dragon"] },
+              { number: 330, name: "Flygon", types: ["Ground", "Dragon"] },
+              { number: 331, name: "Cacnea", types: ["Grass"] },
+              { number: 332, name: "Cacturne", types: ["Grass", "Dark"] },
+              { number: 333, name: "Swablu", types: ["Normal", "Flying"] },
+              { number: 334, name: "Altaria", types: ["Dragon", "Flying"] },
+              { number: 335, name: "Zangoose", types: ["Normal"] },
+              { number: 336, name: "Seviper", types: ["Poison"] },
+              { number: 337, name: "Lunatone", types: ["Rock", "Psychic"] },
+              { number: 338, name: "Solrock", types: ["Rock", "Psychic"] },
+              { number: 339, name: "Barboach", types: ["Water", "Ground"] },
+              { number: 340, name: "Whiscash", types: ["Water", "Ground"] },
+              { number: 341, name: "Corphish", types: ["Water"] },
               { number: 342, name: "Crawdaunt", types: ["Water", "Dark"] },
-              { number: 777, name: "Togedemaru", types: ["Electric", "Steel"] },
+              { number: 343, name: "Baltoy", types: ["Ground", "Psychic"] },
+              { number: 344, name: "Claydol", types: ["Ground", "Psychic"] },
+              { number: 345, name: "Lileep", types: ["Rock", "Grass"] },
+              { number: 346, name: "Cradily", types: ["Rock", "Grass"] },
+              { number: 347, name: "Anorith", types: ["Rock", "Bug"] },
+              { number: 348, name: "Armaldo", types: ["Rock", "Bug"] },
+              { number: 349, name: "Feebas", types: ["Water"] },
+              { number: 350, name: "Milotic", types: ["Water"] },
+              { number: 351, name: "Castform", types: ["Normal"] },
+              { number: 352, name: "Kecleon", types: ["Normal"] },
+              { number: 353, name: "Shuppet", types: ["Ghost"] },
+              { number: 354, name: "Banette", types: ["Ghost"] },
+              { number: 355, name: "Duskull", types: ["Ghost"] },
+              { number: 356, name: "Dusclops", types: ["Ghost"] },
+              { number: 357, name: "Tropius", types: ["Grass", "Flying"] },
+              { number: 358, name: "Chimecho", types: ["Psychic"] },
+              { number: 359, name: "Absol", types: ["Dark"] },
+              { number: 360, name: "Wynaut", types: ["Psychic"] },
+              { number: 361, name: "Snorunt", types: ["Ice"] },
+              { number: 362, name: "Glalie", types: ["Ice"] },
+              { number: 363, name: "Spheal", types: ["Ice", "Water"] },
+              { number: 364, name: "Sealeo", types: ["Ice", "Water"] },
+              { number: 365, name: "Walrein", types: ["Ice", "Water"] },
+              { number: 366, name: "Clamperl", types: ["Water"] },
+              { number: 367, name: "Huntail", types: ["Water"] },
+              { number: 368, name: "Gorebyss", types: ["Water"] },
+              { number: 369, name: "Relicanth", types: ["Water", "Rock"] },
+              { number: 370, name: "Luvdisc", types: ["Water"] },
+              { number: 371, name: "Bagon", types: ["Dragon"] },
+              { number: 372, name: "Shelgon", types: ["Dragon"] },
+              { number: 373, name: "Salamence", types: ["Dragon", "Flying"] },
+              { number: 374, name: "Beldum", types: ["Steel", "Psychic"] },
+              { number: 375, name: "Metang", types: ["Steel", "Psychic"] },
+              { number: 376, name: "Metagross", types: ["Steel", "Psychic"] },
+              { number: 377, name: "Regirock", types: ["Rock"] },
+              { number: 378, name: "Regice", types: ["Ice"] },
+              { number: 379, name: "Registeel", types: ["Steel"] },
+              { number: 380, name: "Latias", types: ["Dragon", "Psychic"] },
+              { number: 381, name: "Latios", types: ["Dragon", "Psychic"] },
+              { number: 382, name: "Kyogre", types: ["Water"] },
+              { number: 383, name: "Groudon", types: ["Ground"] },
+              { number: 384, name: "Rayquaza", types: ["Dragon", "Flying"] },
+              { number: 385, name: "Jirachi", types: ["Steel", "Psychic"] },
+              { number: 386, name: "Deoxys", types: ["Psychic"] },
+              { number: 387, name: "Turtwig", types: ["Grass"] },
+              { number: 388, name: "Grotle", types: ["Grass"] },
+              { number: 389, name: "Torterra", types: ["Grass", "Ground"] },
+              { number: 390, name: "Chimchar", types: ["Fire"] },
+              { number: 391, name: "Monferno", types: ["Fire", "Fighting"] },
+              { number: 392, name: "Infernape", types: ["Fire", "Fighting"] },
+              { number: 393, name: "Piplup", types: ["Water"] },
+              { number: 394, name: "Prinplup", types: ["Water"] },
+              { number: 395, name: "Empoleon", types: ["Water", "Steel"] },
+              { number: 396, name: "Starly", types: ["Normal", "Flying"] },
+              { number: 397, name: "Staravia", types: ["Normal", "Flying"] },
+              { number: 398, name: "Staraptor", types: ["Normal", "Flying"] },
+              { number: 399, name: "Bidoof", types: ["Normal"] },
+              { number: 400, name: "Bibarel", types: ["Normal", "Water"] },
+              { number: 401, name: "Kricketot", types: ["Bug"] },
+              { number: 402, name: "Kricketune", types: ["Bug"] },
+              { number: 403, name: "Shinx", types: ["Electric"] },
+              { number: 404, name: "Luxio", types: ["Electric"] },
+              { number: 405, name: "Luxray", types: ["Electric"] },
+              { number: 406, name: "Budew", types: ["Grass", "Poison"] },
+              { number: 407, name: "Roserade", types: ["Grass", "Poison"] },
+              { number: 408, name: "Cranidos", types: ["Rock"] },
+              { number: 409, name: "Rampardos", types: ["Rock"] },
+              { number: 410, name: "Shieldon", types: ["Rock", "Steel"] },
+              { number: 411, name: "Bastiodon", types: ["Rock", "Steel"] },
+              { number: 412, name: "Burmy", types: ["Bug"] },
+              { number: 413, name: "Wormadam", types: ["Bug", "Grass"] },
+              { number: 414, name: "Mothim", types: ["Bug", "Flying"] },
+              { number: 415, name: "Combee", types: ["Bug", "Flying"] },
+              { number: 416, name: "Vespiquen", types: ["Bug", "Flying"] },
+              { number: 417, name: "Pachirisu", types: ["Electric"] },
+              { number: 418, name: "Buizel", types: ["Water"] },
+              { number: 419, name: "Floatzel", types: ["Water"] },
+              { number: 420, name: "Cherubi", types: ["Grass"] },
+              { number: 421, name: "Cherrim", types: ["Grass"] },
+              { number: 422, name: "Shellos", types: ["Water"] },
+              { number: 423, name: "Gastrodon", types: ["Water", "Ground"] },
+              { number: 424, name: "Ambipom", types: ["Normal"] },
+              { number: 425, name: "Drifloon", types: ["Ghost", "Flying"] },
+              { number: 426, name: "Drifblim", types: ["Ghost", "Flying"] },
+              { number: 427, name: "Buneary", types: ["Normal"] },
+              { number: 428, name: "Lopunny", types: ["Normal"] },
+              { number: 429, name: "Mismagius", types: ["Ghost"] },
+              { number: 430, name: "Honchkrow", types: ["Dark", "Flying"] },
+              { number: 431, name: "Glameow", types: ["Normal"] },
+              { number: 432, name: "Purugly", types: ["Normal"] },
+              { number: 433, name: "Chingling", types: ["Psychic"] },
+              { number: 434, name: "Stunky", types: ["Poison", "Dark"] },
+              { number: 435, name: "Skuntank", types: ["Poison", "Dark"] },
+              { number: 436, name: "Bronzor", types: ["Steel", "Psychic"] },
+              { number: 437, name: "Bronzong", types: ["Steel", "Psychic"] },
+              { number: 438, name: "Bonsly", types: ["Rock"] },
+              { number: 439, name: "Mime Jr.", types: ["Psychic", "Fairy"] },
+              { number: 440, name: "Happiny", types: ["Normal"] },
+              { number: 441, name: "Chatot", types: ["Normal", "Flying"] },
+              { number: 442, name: "Spiritomb", types: ["Ghost", "Dark"] },
+              { number: 443, name: "Gible", types: ["Dragon", "Ground"] },
+              { number: 444, name: "Gabite", types: ["Dragon", "Ground"] },
+              { number: 445, name: "Garchomp", types: ["Dragon", "Ground"] },
+              { number: 446, name: "Munchlax", types: ["Normal"] },
+              { number: 447, name: "Riolu", types: ["Fighting"] },
+              { number: 448, name: "Lucario", types: ["Fighting", "Steel"] },
+              { number: 449, name: "Hippopotas", types: ["Ground"] },
+              { number: 450, name: "Hippowdon", types: ["Ground"] },
+              { number: 451, name: "Skorupi", types: ["Poison", "Bug"] },
+              { number: 452, name: "Drapion", types: ["Poison", "Dark"] },
+              { number: 453, name: "Croagunk", types: ["Poison", "Fighting"] },
+              { number: 454, name: "Toxicroak", types: ["Poison", "Fighting"] },
+              { number: 455, name: "Carnivine", types: ["Grass"] },
+              { number: 456, name: "Finneon", types: ["Water"] },
+              { number: 457, name: "Lumineon", types: ["Water"] },
+              { number: 458, name: "Mantyke", types: ["Water", "Flying"] },
+              { number: 459, name: "Snover", types: ["Grass", "Ice"] },
+              { number: 460, name: "Abomasnow", types: ["Grass", "Ice"] },
+              { number: 461, name: "Weavile", types: ["Dark", "Ice"] },
+              { number: 462, name: "Magnezone", types: ["Electric", "Steel"] },
+              { number: 463, name: "Lickilicky", types: ["Normal"] },
+              { number: 464, name: "Rhyperior", types: ["Ground", "Rock"] },
+              { number: 465, name: "Tangrowth", types: ["Grass"] },
+              { number: 466, name: "Electivire", types: ["Electric"] },
+              { number: 467, name: "Magmortar", types: ["Fire"] },
+              { number: 468, name: "Togekiss", types: ["Fairy", "Flying"] },
+              { number: 469, name: "Yanmega", types: ["Bug", "Flying"] },
+              { number: 470, name: "Leafeon", types: ["Grass"] },
+              { number: 471, name: "Glaceon", types: ["Ice"] },
+              { number: 472, name: "Gliscor", types: ["Ground", "Flying"] },
+              { number: 473, name: "Mamoswine", types: ["Ice", "Ground"] },
+              { number: 474, name: "Porygon-Z", types: ["Normal"] },
+              { number: 475, name: "Gallade", types: ["Psychic", "Fighting"] },
+              { number: 476, name: "Probopass", types: ["Rock", "Steel"] },
+              { number: 477, name: "Dusknoir", types: ["Ghost"] },
+              { number: 478, name: "Froslass", types: ["Ice", "Ghost"] },
+              { number: 479, name: "Rotom", types: ["Electric", "Ghost"] },
+              { number: 480, name: "Uxie", types: ["Psychic"] },
+              { number: 481, name: "Mesprit", types: ["Psychic"] },
+              { number: 482, name: "Azelf", types: ["Psychic"] },
+              { number: 483, name: "Dialga", types: ["Steel", "Dragon"] },
+              { number: 484, name: "Palkia", types: ["Water", "Dragon"] },
+              { number: 485, name: "Heatran", types: ["Fire", "Steel"] },
+              { number: 486, name: "Regigigas", types: ["Normal"] },
+              { number: 487, name: "Giratina", types: ["Ghost", "Dragon"] },
+              { number: 488, name: "Cresselia", types: ["Psychic"] },
+              { number: 489, name: "Phione", types: ["Water"] },
+              { number: 490, name: "Manaphy", types: ["Water"] },
+              { number: 491, name: "Darkrai", types: ["Dark"] },
+              { number: 492, name: "Shaymin", types: ["Grass"] },
+              { number: 493, name: "Arceus", types: ["Normal"] },
+              { number: 494, name: "Victini", types: ["Psychic", "Fire"] },
+              { number: 495, name: "Snivy", types: ["Grass"] },
+              { number: 496, name: "Servine", types: ["Grass"] },
+              { number: 497, name: "Serperior", types: ["Grass"] },
+              { number: 498, name: "Tepig", types: ["Fire"] },
+              { number: 499, name: "Pignite", types: ["Fire", "Fighting"] },
+              { number: 500, name: "Emboar", types: ["Fire", "Fighting"] },
+              { number: 501, name: "Oshawott", types: ["Water"] },
+              { number: 502, name: "Dewott", types: ["Water"] },
+              { number: 503, name: "Samurott", types: ["Water"] },
+              { number: 504, name: "Patrat", types: ["Normal"] },
+              { number: 505, name: "Watchog", types: ["Normal"] },
+              { number: 506, name: "Lillipup", types: ["Normal"] },
+              { number: 507, name: "Herdier", types: ["Normal"] },
+              { number: 508, name: "Stoutland", types: ["Normal"] },
+              { number: 509, name: "Purrloin", types: ["Dark"] },
+              { number: 510, name: "Liepard", types: ["Dark"] },
+              { number: 511, name: "Pansage", types: ["Grass"] },
+              { number: 512, name: "Simisage", types: ["Grass"] },
+              { number: 513, name: "Pansear", types: ["Fire"] },
+              { number: 514, name: "Simisear", types: ["Fire"] },
+              { number: 515, name: "Panpour", types: ["Water"] },
+              { number: 516, name: "Simipour", types: ["Water"] },
+              { number: 517, name: "Munna", types: ["Psychic"] },
+              { number: 518, name: "Musharna", types: ["Psychic"] },
+              { number: 519, name: "Pidove", types: ["Normal", "Flying"] },
+              { number: 520, name: "Tranquill", types: ["Normal", "Flying"] },
+              { number: 521, name: "Unfezant", types: ["Normal", "Flying"] },
+              { number: 522, name: "Blitzle", types: ["Electric"] },
+              { number: 523, name: "Zebstrika", types: ["Electric"] },
+              { number: 524, name: "Roggenrola", types: ["Rock"] },
+              { number: 525, name: "Boldore", types: ["Rock"] },
+              { number: 526, name: "Gigalith", types: ["Rock"] },
+              { number: 527, name: "Woobat", types: ["Psychic", "Flying"] },
+              { number: 528, name: "Swoobat", types: ["Psychic", "Flying"] },
+              { number: 529, name: "Drilbur", types: ["Ground"] },
+              { number: 530, name: "Excadrill", types: ["Ground", "Steel"] },
+              { number: 531, name: "Audino", types: ["Normal"] },
+              { number: 532, name: "Timburr", types: ["Fighting"] },
+              { number: 533, name: "Gurdurr", types: ["Fighting"] },
+              { number: 534, name: "Conkeldurr", types: ["Fighting"] },
+              { number: 535, name: "Tympole", types: ["Water"] },
+              { number: 536, name: "Palpitoad", types: ["Water", "Ground"] },
+              { number: 537, name: "Seismitoad", types: ["Water", "Ground"] },
+              { number: 538, name: "Throh", types: ["Fighting"] },
+              { number: 539, name: "Sawk", types: ["Fighting"] },
+              { number: 540, name: "Sewaddle", types: ["Bug", "Grass"] },
+              { number: 541, name: "Swadloon", types: ["Bug", "Grass"] },
+              { number: 542, name: "Leavanny", types: ["Bug", "Grass"] },
+              { number: 543, name: "Venipede", types: ["Bug", "Poison"] },
+              { number: 544, name: "Whirlipede", types: ["Bug", "Poison"] },
+              { number: 545, name: "Scolipede", types: ["Bug", "Poison"] },
+              { number: 546, name: "Cottonee", types: ["Grass", "Fairy"] },
+              { number: 547, name: "Whimsicott", types: ["Grass", "Fairy"] },
+              { number: 548, name: "Petilil", types: ["Grass"] },
+              { number: 549, name: "Lilligant", types: ["Grass"] },
+              { number: 550, name: "Basculin", types: ["Water"] },
+              { number: 551, name: "Sandile", types: ["Ground", "Dark"] },
+              { number: 552, name: "Krokorok", types: ["Ground", "Dark"] },
+              { number: 553, name: "Krookodile", types: ["Ground", "Dark"] },
+              { number: 554, name: "Darumaka", types: ["Ice"] },
+              { number: 555, name: "Darmanitan", types: ["Ice"] },
+              { number: 556, name: "Maractus", types: ["Grass"] },
+              { number: 557, name: "Dwebble", types: ["Bug", "Rock"] },
+              { number: 558, name: "Crustle", types: ["Bug", "Rock"] },
+              { number: 559, name: "Scraggy", types: ["Dark", "Fighting"] },
+              { number: 560, name: "Scrafty", types: ["Dark", "Fighting"] },
+              { number: 561, name: "Sigilyph", types: ["Psychic", "Flying"] },
+              { number: 562, name: "Yamask", types: ["Ghost"] },
+              { number: 563, name: "Cofagrigus", types: ["Ghost"] },
+              { number: 564, name: "Tirtouga", types: ["Water", "Rock"] },
+              { number: 565, name: "Carracosta", types: ["Water", "Rock"] },
+              { number: 566, name: "Archen", types: ["Rock", "Flying"] },
+              { number: 567, name: "Archeops", types: ["Rock", "Flying"] },
+              { number: 568, name: "Trubbish", types: ["Poison"] },
+              { number: 569, name: "Garbodor", types: ["Poison"] },
+              { number: 570, name: "Zorua", types: ["Dark"] },
+              { number: 571, name: "Zoroark", types: ["Dark"] },
+              { number: 572, name: "Minccino", types: ["Normal"] },
+              { number: 573, name: "Cinccino", types: ["Normal"] },
+              { number: 574, name: "Gothita", types: ["Psychic"] },
+              { number: 575, name: "Gothorita", types: ["Psychic"] },
+              { number: 576, name: "Gothitelle", types: ["Psychic"] },
+              { number: 577, name: "Solosis", types: ["Psychic"] },
+              { number: 578, name: "Duosion", types: ["Psychic"] },
+              { number: 579, name: "Reuniclus", types: ["Psychic"] },
+              { number: 580, name: "Ducklett", types: ["Water", "Flying"] },
+              { number: 581, name: "Swanna", types: ["Water", "Flying"] },
+              { number: 582, name: "Vanillite", types: ["Ice"] },
+              { number: 583, name: "Vanillish", types: ["Ice"] },
+              { number: 584, name: "Vanilluxe", types: ["Ice"] },
+              { number: 585, name: "Deerling", types: ["Normal", "Grass"] },
+              { number: 586, name: "Sawsbuck", types: ["Normal", "Grass"] },
+              { number: 587, name: "Emolga", types: ["Electric", "Flying"] },
+              { number: 588, name: "Karrablast", types: ["Bug"] },
+              { number: 589, name: "Escavalier", types: ["Bug", "Steel"] },
+              { number: 590, name: "Foongus", types: ["Grass", "Poison"] },
+              { number: 591, name: "Amoonguss", types: ["Grass", "Poison"] },
+              { number: 592, name: "Frillish", types: ["Water", "Ghost"] },
+              { number: 593, name: "Jellicent", types: ["Water", "Ghost"] },
+              { number: 594, name: "Alomomola", types: ["Water"] },
+              { number: 595, name: "Joltik", types: ["Bug", "Electric"] },
+              { number: 596, name: "Galvantula", types: ["Bug", "Electric"] },
+              { number: 597, name: "Ferroseed", types: ["Grass", "Steel"] },
+              { number: 598, name: "Ferrothorn", types: ["Grass", "Steel"] },
+              { number: 599, name: "Klink", types: ["Steel"] },
+              { number: 600, name: "Klang", types: ["Steel"] },
+              { number: 601, name: "Klinklang", types: ["Steel"] },
+              { number: 602, name: "Tynamo", types: ["Electric"] },
+              { number: 603, name: "Eelektrik", types: ["Electric"] },
+              { number: 604, name: "Eelektross", types: ["Electric"] },
+              { number: 605, name: "Elgyem", types: ["Psychic"] },
+              { number: 606, name: "Beheeyem", types: ["Psychic"] },
+              { number: 607, name: "Litwick", types: ["Ghost", "Fire"] },
+              { number: 608, name: "Lampent", types: ["Ghost", "Fire"] },
+              { number: 609, name: "Chandelure", types: ["Ghost", "Fire"] },
+              { number: 610, name: "Axew", types: ["Dragon"] },
+              { number: 611, name: "Fraxure", types: ["Dragon"] },
+              { number: 612, name: "Haxorus", types: ["Dragon"] },
+              { number: 613, name: "Cubchoo", types: ["Ice"] },
+              { number: 614, name: "Beartic", types: ["Ice"] },
+              { number: 615, name: "Cryogonal", types: ["Ice"] },
+              { number: 616, name: "Shelmet", types: ["Bug"] },
+              { number: 617, name: "Accelgor", types: ["Bug"] },
+              { number: 618, name: "Stunfisk", types: ["Ground", "Electric"] },
+              { number: 619, name: "Mienfoo", types: ["Fighting"] },
+              { number: 620, name: "Mienshao", types: ["Fighting"] },
+              { number: 621, name: "Druddigon", types: ["Dragon"] },
+              { number: 622, name: "Golett", types: ["Ground", "Ghost"] },
+              { number: 623, name: "Golurk", types: ["Ground", "Ghost"] },
+              { number: 624, name: "Pawniard", types: ["Dark", "Steel"] },
+              { number: 625, name: "Bisharp", types: ["Dark", "Steel"] },
+              { number: 626, name: "Bouffalant", types: ["Normal"] },
+              { number: 627, name: "Rufflet", types: ["Normal", "Flying"] },
+              { number: 628, name: "Braviary", types: ["Normal", "Flying"] },
+              { number: 629, name: "Vullaby", types: ["Dark", "Flying"] },
+              { number: 630, name: "Mandibuzz", types: ["Dark", "Flying"] },
+              { number: 631, name: "Heatmor", types: ["Fire"] },
+              { number: 632, name: "Durant", types: ["Bug", "Steel"] },
+              { number: 633, name: "Deino", types: ["Dark", "Dragon"] },
+              { number: 634, name: "Zweilous", types: ["Dark", "Dragon"] },
+              { number: 635, name: "Hydreigon", types: ["Dark", "Dragon"] },
+              { number: 636, name: "Larvesta", types: ["Bug", "Fire"] },
+              { number: 637, name: "Volcarona", types: ["Bug", "Fire"] },
+              { number: 638, name: "Cobalion", types: ["Steel", "Fighting"] },
+              { number: 639, name: "Terrakion", types: ["Rock", "Fighting"] },
+              { number: 640, name: "Virizion", types: ["Grass", "Fighting"] },
+              { number: 641, name: "Tornadus", types: ["Flying"] },
+              { number: 642, name: "Thundurus", types: ["Electric", "Flying"] },
+              { number: 643, name: "Reshiram", types: ["Dragon", "Fire"] },
+              { number: 644, name: "Zekrom", types: ["Dragon", "Electric"] },
+              { number: 645, name: "Landorus", types: ["Ground", "Flying"] },
+              { number: 646, name: "Kyurem", types: ["Dragon", "Ice"] },
+              { number: 647, name: "Keldeo", types: ["Water", "Fighting"] },
+              { number: 648, name: "Meloetta", types: ["Normal", "Psychic"] },
+              { number: 649, name: "Genesect", types: ["Bug", "Steel"] },
+              { number: 650, name: "Chespin", types: ["Grass"] },
+              { number: 651, name: "Quilladin", types: ["Grass"] },
+              { number: 652, name: "Chesnaught", types: ["Grass", "Fighting"] },
+              { number: 653, name: "Fennekin", types: ["Fire"] },
+              { number: 654, name: "Braixen", types: ["Fire"] },
+              { number: 655, name: "Delphox", types: ["Fire", "Psychic"] },
+              { number: 656, name: "Froakie", types: ["Water"] },
+              { number: 657, name: "Frogadier", types: ["Water"] },
+              { number: 658, name: "Greninja", types: ["Water", "Dark"] },
+              { number: 659, name: "Bunnelby", types: ["Normal"] },
+              { number: 660, name: "Diggersby", types: ["Normal", "Ground"] },
+              { number: 661, name: "Fletchling", types: ["Normal", "Flying"] },
+              { number: 662, name: "Fletchinder", types: ["Fire", "Flying"] },
+              { number: 663, name: "Talonflame", types: ["Fire", "Flying"] },
+              { number: 664, name: "Scatterbug", types: ["Bug"] },
+              { number: 665, name: "Spewpa", types: ["Bug"] },
+              { number: 666, name: "Vivillon", types: ["Bug", "Flying"] },
+              { number: 667, name: "Litleo", types: ["Fire", "Normal"] },
+              { number: 668, name: "Pyroar", types: ["Fire", "Normal"] },
+              { number: 669, name: "Flabébé", types: ["Fairy"] },
+              { number: 670, name: "Floette", types: ["Fairy"] },
+              { number: 671, name: "Florges", types: ["Fairy"] },
+              { number: 672, name: "Skiddo", types: ["Grass"] },
+              { number: 673, name: "Gogoat", types: ["Grass"] },
+              { number: 674, name: "Pancham", types: ["Fighting"] },
+              { number: 675, name: "Pangoro", types: ["Fighting", "Dark"] },
+              { number: 676, name: "Furfrou", types: ["Normal"] },
+              { number: 677, name: "Espurr", types: ["Psychic"] },
+              { number: 678, name: "Meowstic", types: ["Psychic"] },
+              { number: 679, name: "Honedge", types: ["Steel", "Ghost"] },
+              { number: 680, name: "Doublade", types: ["Steel", "Ghost"] },
+              { number: 681, name: "Aegislash", types: ["Steel", "Ghost"] },
+              { number: 682, name: "Spritzee", types: ["Fairy"] },
+              { number: 683, name: "Aromatisse", types: ["Fairy"] },
+              { number: 684, name: "Swirlix", types: ["Fairy"] },
+              { number: 685, name: "Slurpuff", types: ["Fairy"] },
+              { number: 686, name: "Inkay", types: ["Dark", "Psychic"] },
+              { number: 687, name: "Malamar", types: ["Dark", "Psychic"] },
+              { number: 688, name: "Binacle", types: ["Rock", "Water"] },
+              { number: 689, name: "Barbaracle", types: ["Rock", "Water"] },
+              { number: 690, name: "Skrelp", types: ["Poison", "Water"] },
+              { number: 691, name: "Dragalge", types: ["Poison", "Dragon"] },
+              { number: 692, name: "Clauncher", types: ["Water"] },
+              { number: 693, name: "Clawitzer", types: ["Water"] },
+              {
+                number: 694,
+                name: "Helioptile",
+                types: ["Electric", "Normal"],
+              },
+              { number: 695, name: "Heliolisk", types: ["Electric", "Normal"] },
+              { number: 696, name: "Tyrunt", types: ["Rock", "Dragon"] },
+              { number: 697, name: "Tyrantrum", types: ["Rock", "Dragon"] },
+              { number: 698, name: "Amaura", types: ["Rock", "Ice"] },
+              { number: 699, name: "Aurorus", types: ["Rock", "Ice"] },
+              { number: 700, name: "Sylveon", types: ["Fairy"] },
+              { number: 751, name: "Inkay", types: ["Dark", "Psychic"] },
+              { number: 752, name: "Malamar", types: ["Dark", "Psychic"] },
+              { number: 753, name: "Binacle", types: ["Rock", "Water"] },
+              { number: 754, name: "Barbaracle", types: ["Rock", "Water"] },
+              { number: 755, name: "Skrelp", types: ["Poison", "Water"] },
+              { number: 756, name: "Dragalge", types: ["Poison", "Dragon"] },
+              { number: 757, name: "Clauncher", types: ["Water"] },
+              { number: 758, name: "Clawitzer", types: ["Water"] },
+              {
+                number: 759,
+                name: "Helioptile",
+                types: ["Electric", "Normal"],
+              },
+              { number: 760, name: "Heliolisk", types: ["Electric", "Normal"] },
+              { number: 761, name: "Tyrunt", types: ["Rock", "Dragon"] },
+              { number: 762, name: "Tyrantrum", types: ["Rock", "Dragon"] },
+              { number: 763, name: "Amaura", types: ["Rock", "Ice"] },
+              { number: 764, name: "Aurorus", types: ["Rock", "Ice"] },
+              { number: 765, name: "Sylveon", types: ["Fairy"] },
+              { number: 766, name: "Hawlucha", types: ["Fighting", "Flying"] },
+              { number: 767, name: "Dedenne", types: ["Electric", "Fairy"] },
+              { number: 768, name: "Carbink", types: ["Rock", "Fairy"] },
+              { number: 769, name: "Goomy", types: ["Dragon"] },
+              { number: 770, name: "Sliggoo", types: ["Dragon"] },
+              { number: 771, name: "Goodra", types: ["Dragon"] },
+              { number: 772, name: "Klefki", types: ["Steel", "Fairy"] },
+              { number: 773, name: "Phantump", types: ["Ghost", "Grass"] },
+              { number: 774, name: "Trevenant", types: ["Ghost", "Grass"] },
+              { number: 775, name: "Pumpkaboo", types: ["Ghost", "Grass"] },
+              { number: 776, name: "Gourgeist", types: ["Ghost", "Grass"] },
+              { number: 777, name: "Bergmite", types: ["Ice"] },
+              { number: 778, name: "Avalugg", types: ["Ice"] },
+              { number: 779, name: "Noibat", types: ["Flying", "Dragon"] },
+              { number: 780, name: "Noivern", types: ["Flying", "Dragon"] },
+              { number: 781, name: "Xerneas", types: ["Fairy"] },
+              { number: 782, name: "Yveltal", types: ["Dark", "Flying"] },
+              { number: 783, name: "Zygarde", types: ["Dragon", "Ground"] },
+              { number: 784, name: "Diancie", types: ["Rock", "Fairy"] },
+              { number: 785, name: "Hoopa", types: ["Psychic", "Ghost"] },
+              { number: 786, name: "Volcanion", types: ["Fire", "Water"] },
+              { number: 787, name: "Rowlet", types: ["Grass", "Flying"] },
+              { number: 788, name: "Dartrix", types: ["Grass", "Flying"] },
+              { number: 789, name: "Decidueye", types: ["Grass", "Ghost"] },
+              { number: 790, name: "Litten", types: ["Fire"] },
+              { number: 791, name: "Torracat", types: ["Fire"] },
+              { number: 792, name: "Incineroar", types: ["Fire", "Dark"] },
+              { number: 793, name: "Popplio", types: ["Water"] },
+              { number: 794, name: "Brionne", types: ["Water"] },
+              { number: 795, name: "Primarina", types: ["Water", "Fairy"] },
+              { number: 796, name: "Pikipek", types: ["Normal", "Flying"] },
+              { number: 797, name: "Trumbeak", types: ["Normal", "Flying"] },
+              { number: 798, name: "Toucannon", types: ["Normal", "Flying"] },
+              { number: 799, name: "Yungoos", types: ["Normal"] },
+              { number: 800, name: "Gumshoos", types: ["Normal"] },
+              { number: 801, name: "Magearna", types: ["Steel", "Fairy"] },
+              { number: 802, name: "Marshadow", types: ["Fighting", "Ghost"] },
+              { number: 803, name: "Poipole", types: ["Poison"] },
+              { number: 804, name: "Naganadel", types: ["Poison", "Dragon"] },
+              { number: 805, name: "Stakataka", types: ["Rock", "Steel"] },
+              { number: 806, name: "Blacephalon", types: ["Fire", "Ghost"] },
+              { number: 807, name: "Zeraora", types: ["Electric"] },
+              { number: 808, name: "Meltan", types: ["Steel"] },
+              { number: 809, name: "Melmetal", types: ["Steel"] },
+              { number: 810, name: "Grookey", types: ["Grass"] },
+              { number: 811, name: "Thwackey", types: ["Grass"] },
+              { number: 812, name: "Rillaboom", types: ["Grass"] },
+              { number: 813, name: "Scorbunny", types: ["Fire"] },
+              { number: 814, name: "Raboot", types: ["Fire"] },
+              { number: 815, name: "Cinderace", types: ["Fire"] },
+              { number: 816, name: "Sobble", types: ["Water"] },
+              { number: 817, name: "Drizzile", types: ["Water"] },
+              { number: 818, name: "Inteleon", types: ["Water"] },
+              { number: 819, name: "Skwovet", types: ["Normal"] },
+              { number: 820, name: "Greedent", types: ["Normal"] },
+              { number: 821, name: "Rookidee", types: ["Flying"] },
+              { number: 822, name: "Corvisquire", types: ["Flying"] },
+              { number: 823, name: "Corviknight", types: ["Flying", "Steel"] },
+              { number: 824, name: "Blipbug", types: ["Bug"] },
+              { number: 825, name: "Dottler", types: ["Bug", "Psychic"] },
+              { number: 826, name: "Orbeetle", types: ["Bug", "Psychic"] },
+              { number: 827, name: "Nickit", types: ["Dark"] },
+              { number: 828, name: "Thievul", types: ["Dark"] },
+              { number: 829, name: "Gossifleur", types: ["Grass"] },
+              { number: 830, name: "Eldegoss", types: ["Grass"] },
+              { number: 831, name: "Wooloo", types: ["Normal"] },
+              { number: 832, name: "Dubwool", types: ["Normal"] },
+              { number: 833, name: "Chewtle", types: ["Water"] },
+              { number: 834, name: "Drednaw", types: ["Water", "Rock"] },
+              { number: 835, name: "Yamper", types: ["Electric"] },
+              { number: 836, name: "Boltund", types: ["Electric"] },
+              { number: 837, name: "Rolycoly", types: ["Rock"] },
+              { number: 838, name: "Carkol", types: ["Rock", "Fire"] },
+              { number: 839, name: "Coalossal", types: ["Rock", "Fire"] },
+              { number: 840, name: "Applin", types: ["Grass", "Dragon"] },
+              { number: 841, name: "Flapple", types: ["Grass", "Dragon"] },
+              { number: 842, name: "Appletun", types: ["Grass", "Dragon"] },
+              { number: 843, name: "Silicobra", types: ["Ground"] },
+              { number: 844, name: "Sandaconda", types: ["Ground"] },
+              { number: 845, name: "Cramorant", types: ["Flying", "Water"] },
+              { number: 846, name: "Arrokuda", types: ["Water"] },
+              { number: 847, name: "Barraskewda", types: ["Water"] },
+              { number: 848, name: "Toxel", types: ["Electric", "Poison"] },
+              {
+                number: 849,
+                name: "Toxtricity",
+                types: ["Electric", "Poison"],
+              },
+              { number: 850, name: "Sizzlipede", types: ["Fire", "Bug"] },
+              { number: 851, name: "Centiskorch", types: ["Fire", "Bug"] },
+              { number: 852, name: "Clobbopus", types: ["Fighting"] },
+              { number: 853, name: "Grapploct", types: ["Fighting"] },
+              { number: 854, name: "Sinistea", types: ["Ghost"] },
+              { number: 855, name: "Polteageist", types: ["Ghost"] },
+              { number: 856, name: "Hatenna", types: ["Psychic"] },
+              { number: 857, name: "Hattrem", types: ["Psychic"] },
+              { number: 858, name: "Hatterene", types: ["Psychic", "Fairy"] },
+              { number: 859, name: "Impidimp", types: ["Dark", "Fairy"] },
+              { number: 860, name: "Morgrem", types: ["Dark", "Fairy"] },
+              { number: 861, name: "Grimmsnarl", types: ["Dark", "Fairy"] },
+              { number: 862, name: "Obstagoon", types: ["Dark", "Normal"] },
+              { number: 863, name: "Perrserker", types: ["Steel"] },
+              { number: 864, name: "Cursola", types: ["Ghost"] },
+              { number: 865, name: "Sirfetch'd", types: ["Fighting"] },
+              { number: 866, name: "Mr. Rime", types: ["Ice", "Psychic"] },
+              { number: 867, name: "Runerigus", types: ["Ground", "Ghost"] },
+              { number: 868, name: "Milcery", types: ["Fairy"] },
+              { number: 869, name: "Alcremie", types: ["Fairy"] },
+              { number: 870, name: "Falinks", types: ["Fighting"] },
+              { number: 871, name: "Pincurchin", types: ["Electric"] },
+              { number: 872, name: "Snom", types: ["Ice", "Bug"] },
+              { number: 873, name: "Frosmoth", types: ["Ice", "Bug"] },
+              { number: 874, name: "Stonjourner", types: ["Rock"] },
+              { number: 875, name: "Eiscue", types: ["Ice"] },
+              { number: 876, name: "Indeedee", types: ["Psychic", "Normal"] },
+              { number: 877, name: "Morpeko", types: ["Electric", "Dark"] },
+              { number: 878, name: "Cufant", types: ["Steel"] },
+              { number: 879, name: "Copperajah", types: ["Steel"] },
+              { number: 880, name: "Dracozolt", types: ["Electric", "Dragon"] },
+              { number: 881, name: "Arctozolt", types: ["Electric", "Ice"] },
+              { number: 882, name: "Dracovish", types: ["Water", "Dragon"] },
+              { number: 883, name: "Arctovish", types: ["Water", "Ice"] },
+              { number: 884, name: "Duraludon", types: ["Steel", "Dragon"] },
+              { number: 885, name: "Dreepy", types: ["Dragon", "Ghost"] },
+              { number: 886, name: "Drakloak", types: ["Dragon", "Ghost"] },
+              { number: 887, name: "Dragapult", types: ["Dragon", "Ghost"] },
+              { number: 888, name: "Zacian", types: ["Fairy", "Steel"] },
+              { number: 889, name: "Zamazenta", types: ["Fighting", "Steel"] },
+              { number: 890, name: "Eternatus", types: ["Poison", "Dragon"] },
+              { number: 891, name: "Kubfu", types: ["Fighting"] },
+              { number: 892, name: "Urshifu", types: ["Fighting", "Dark"] },
+              { number: 893, name: "Zarude", types: ["Dark", "Grass"] },
+              { number: 894, name: "Regieleki", types: ["Electric"] },
+              { number: 895, name: "Regidrago", types: ["Dragon"] },
+              { number: 896, name: "Glastrier", types: ["Ice"] },
+              { number: 897, name: "Spectrier", types: ["Ghost"] },
+              { number: 898, name: "Calyrex", types: ["Psychic", "Grass"] },
+              { number: 899, name: "Eternatus", types: ["Poison", "Dragon"] },
+              { number: 900, name: "Eternamax", types: ["Poison", "Dragon"] },
+              { number: 901, name: "Victini", types: ["Psychic", "Fire"] },
+              { number: 902, name: "Snivy", types: ["Grass"] },
+              { number: 903, name: "Servine", types: ["Grass"] },
+              { number: 904, name: "Serperior", types: ["Grass"] },
+              { number: 905, name: "Tepig", types: ["Fire"] },
+              { number: 906, name: "Pignite", types: ["Fire", "Fighting"] },
+              { number: 907, name: "Emboar", types: ["Fire", "Fighting"] },
+              { number: 908, name: "Oshawott", types: ["Water"] },
+              { number: 909, name: "Dewott", types: ["Water"] },
+              { number: 910, name: "Samurott", types: ["Water"] },
+              { number: 911, name: "Patrat", types: ["Normal"] },
+              { number: 912, name: "Watchog", types: ["Normal"] },
+              { number: 913, name: "Lillipup", types: ["Normal"] },
+              { number: 914, name: "Herdier", types: ["Normal"] },
+              { number: 915, name: "Stoutland", types: ["Normal"] },
+              { number: 916, name: "Purrloin", types: ["Dark"] },
+              { number: 917, name: "Liepard", types: ["Dark"] },
+              { number: 918, name: "Pansage", types: ["Grass"] },
+              { number: 919, name: "Simisage", types: ["Grass"] },
+              { number: 920, name: "Pansear", types: ["Fire"] },
+              { number: 921, name: "Simisear", types: ["Fire"] },
+              { number: 922, name: "Panpour", types: ["Water"] },
+              { number: 923, name: "Simipour", types: ["Water"] },
+              { number: 924, name: "Munna", types: ["Psychic"] },
+              { number: 925, name: "Musharna", types: ["Psychic"] },
+              { number: 926, name: "Pidove", types: ["Normal", "Flying"] },
+              { number: 927, name: "Tranquill", types: ["Normal", "Flying"] },
+              { number: 928, name: "Unfezant", types: ["Normal", "Flying"] },
+              { number: 929, name: "Blitzle", types: ["Electric"] },
+              { number: 930, name: "Zebstrika", types: ["Electric"] },
+              { number: 931, name: "Roggenrola", types: ["Rock"] },
+              { number: 932, name: "Boldore", types: ["Rock"] },
+              { number: 933, name: "Gigalith", types: ["Rock"] },
+              { number: 934, name: "Woobat", types: ["Psychic", "Flying"] },
+              { number: 935, name: "Swoobat", types: ["Psychic", "Flying"] },
+              { number: 936, name: "Drilbur", types: ["Ground"] },
+              { number: 937, name: "Excadrill", types: ["Ground", "Steel"] },
+              { number: 938, name: "Audino", types: ["Normal"] },
+              { number: 939, name: "Timburr", types: ["Fighting"] },
+              { number: 940, name: "Gurdurr", types: ["Fighting"] },
+              { number: 941, name: "Conkeldurr", types: ["Fighting"] },
+              { number: 942, name: "Tympole", types: ["Water"] },
+              { number: 943, name: "Palpitoad", types: ["Water", "Ground"] },
+              { number: 944, name: "Seismitoad", types: ["Water", "Ground"] },
+              { number: 945, name: "Throh", types: ["Fighting"] },
+              { number: 946, name: "Sawk", types: ["Fighting"] },
+              { number: 947, name: "Sewaddle", types: ["Bug", "Grass"] },
+              { number: 948, name: "Swadloon", types: ["Bug", "Grass"] },
+              { number: 949, name: "Leavanny", types: ["Bug", "Grass"] },
+              { number: 950, name: "Venipede", types: ["Bug", "Poison"] },
+              { number: 951, name: "Cufant", types: ["Steel"] },
+              { number: 952, name: "Copperajah", types: ["Steel"] },
+              { number: 953, name: "Dracozolt", types: ["Electric", "Dragon"] },
+              { number: 954, name: "Arctozolt", types: ["Electric", "Ice"] },
+              { number: 955, name: "Dracovish", types: ["Water", "Dragon"] },
+              { number: 956, name: "Arctovish", types: ["Water", "Ice"] },
+              { number: 957, name: "Duraludon", types: ["Steel", "Dragon"] },
+              { number: 958, name: "Dreepy", types: ["Dragon", "Ghost"] },
+              { number: 959, name: "Drakloak", types: ["Dragon", "Ghost"] },
+              { number: 960, name: "Dragapult", types: ["Dragon", "Ghost"] },
+              { number: 961, name: "Zacian", types: ["Fairy"] },
+              {
+                number: 962,
+                name: "Zacian-Crowned",
+                types: ["Fairy", "Steel"],
+              },
+              { number: 963, name: "Zamazenta", types: ["Fighting"] },
+              {
+                number: 964,
+                name: "Zamazenta-Crowned",
+                types: ["Fighting", "Steel"],
+              },
+              { number: 965, name: "Eternatus", types: ["Poison", "Dragon"] },
+              {
+                number: 966,
+                name: "Eternatus-Eternamax",
+                types: ["Poison", "Dragon"],
+              },
+              { number: 967, name: "Kubfu", types: ["Fighting"] },
+              {
+                number: 968,
+                name: "Urshifu-Single-Strike",
+                types: ["Fighting", "Dark"],
+              },
+              {
+                number: 969,
+                name: "Urshifu-Rapid-Strike",
+                types: ["Fighting", "Water"],
+              },
+              { number: 970, name: "Zarude", types: ["Dark", "Grass"] },
+              { number: 971, name: "Regieleki", types: ["Electric"] },
+              { number: 972, name: "Regidrago", types: ["Dragon"] },
+              { number: 973, name: "Glastrier", types: ["Ice"] },
+              { number: 974, name: "Spectrier", types: ["Ghost"] },
+              { number: 975, name: "Calyrex", types: ["Psychic", "Grass"] },
+              {
+                number: 976,
+                name: "Calyrex-Ice-Rider",
+                types: ["Psychic", "Ice"],
+              },
+              {
+                number: 977,
+                name: "Calyrex-Shadow-Rider",
+                types: ["Psychic", "Ghost"],
+              },
+              { number: 978, name: "Regieleki", types: ["Electric"] },
+              { number: 979, name: "Regidrago", types: ["Dragon"] },
+              { number: 980, name: "Glastrier", types: ["Ice"] },
+              { number: 981, name: "Spectrier", types: ["Ghost"] },
+              { number: 982, name: "Calyrex", types: ["Psychic", "Grass"] },
+              {
+                number: 983,
+                name: "Calyrex-Ice-Rider",
+                types: ["Psychic", "Ice"],
+              },
+              {
+                number: 984,
+                name: "Calyrex-Shadow-Rider",
+                types: ["Psychic", "Ghost"],
+              },
+              { number: 985, name: "Cramorant", types: ["Flying", "Water"] },
+              { number: 986, name: "Arrokuda", types: ["Water"] },
+              { number: 987, name: "Barraskewda", types: ["Water"] },
+              { number: 988, name: "Toxel", types: ["Electric", "Poison"] },
+              {
+                number: 989,
+                name: "Toxtricity-Amped",
+                types: ["Electric", "Poison"],
+              },
+              {
+                number: 990,
+                name: "Toxtricity-Low-Key",
+                types: ["Electric", "Poison"],
+              },
+              { number: 991, name: "Sizzlipede", types: ["Fire", "Bug"] },
+              { number: 992, name: "Centiskorch", types: ["Fire", "Bug"] },
+              { number: 993, name: "Clobbopus", types: ["Fighting"] },
+              { number: 994, name: "Grapploct", types: ["Fighting"] },
+              { number: 995, name: "Sinistea", types: ["Ghost"] },
+              { number: 996, name: "Polteageist", types: ["Ghost"] },
+              { number: 997, name: "Hatenna", types: ["Psychic"] },
+              { number: 998, name: "Hattrem", types: ["Psychic"] },
+              { number: 999, name: "Hatterene", types: ["Psychic", "Fairy"] },
+              { number: 1000, name: "Impidimp", types: ["Dark", "Fairy"] },
+              { number: 1001, name: "Morgrem", types: ["Dark", "Fairy"] },
+              { number: 1002, name: "Grimmsnarl", types: ["Dark", "Fairy"] },
+              { number: 1003, name: "Obstagoon", types: ["Dark", "Normal"] },
+              { number: 1004, name: "Perrserker", types: ["Steel"] },
+              { number: 1005, name: "Cursola", types: ["Ghost"] },
+              { number: 1006, name: "Sirfetch'd", types: ["Fighting"] },
+              { number: 1007, name: "Mr. Rime", types: ["Ice", "Psychic"] },
+              { number: 1008, name: "Runerigus", types: ["Ground", "Ghost"] },
+              { number: 1009, name: "Milcery", types: ["Fairy"] },
+              { number: 1010, name: "Alcremie", types: ["Fairy"] },
+              { number: 1011, name: "Falinks", types: ["Fighting"] },
+              { number: 1012, name: "Pincurchin", types: ["Electric"] },
+              { number: 1013, name: "Snom", types: ["Ice", "Bug"] },
+              { number: 1014, name: "Frosmoth", types: ["Ice", "Bug"] },
+              { number: 1015, name: "Stonjourner", types: ["Rock"] },
+              { number: 1016, name: "Eiscue", types: ["Ice"] },
+              { number: 1017, name: "Indeedee", types: ["Psychic", "Normal"] },
+              { number: 1018, name: "Morpeko", types: ["Electric", "Dark"] },
+              { number: 1019, name: "Cufant", types: ["Steel"] },
+              { number: 1020, name: "Copperajah", types: ["Steel"] },
+              {
+                number: 1021,
+                name: "Dracozolt",
+                types: ["Electric", "Dragon"],
+              },
+              { number: 1022, name: "Arctozolt", types: ["Electric", "Ice"] },
+              { number: 1023, name: "Dracovish", types: ["Water", "Dragon"] },
+              { number: 1024, name: "Arctovish", types: ["Water", "Ice"] },
+              { number: 1025, name: "Duraludon", types: ["Steel", "Dragon"] },
+              { number: 1026, name: "Dreepy", types: ["Dragon", "Ghost"] },
+              { number: 1027, name: "Drakloak", types: ["Dragon", "Ghost"] },
+              { number: 1028, name: "Dragapult", types: ["Dragon", "Ghost"] },
+              { number: 1029, name: "Zacian", types: ["Fairy"] },
+              {
+                number: 1030,
+                name: "Zacian-Crowned",
+                types: ["Fairy", "Steel"],
+              },
+              { number: 1031, name: "Zamazenta", types: ["Fighting"] },
+              {
+                number: 1032,
+                name: "Zamazenta-Crowned",
+                types: ["Fighting", "Steel"],
+              },
+              { number: 1033, name: "Eternatus", types: ["Poison", "Dragon"] },
+              {
+                number: 1034,
+                name: "Eternatus-Eternamax",
+                types: ["Poison", "Dragon"],
+              },
+              { number: 1035, name: "Kubfu", types: ["Fighting"] },
+              {
+                number: 1036,
+                name: "Urshifu-Single-Strike",
+                types: ["Fighting", "Dark"],
+              },
+              {
+                number: 1037,
+                name: "Urshifu-Rapid-Strike",
+                types: ["Fighting", "Water"],
+              },
+              { number: 1038, name: "Zarude", types: ["Dark", "Grass"] },
+              { number: 1039, name: "Regieleki", types: ["Electric"] },
+              { number: 1040, name: "Regidrago", types: ["Dragon"] },
+              { number: 1041, name: "Glastrier", types: ["Ice"] },
+              { number: 1042, name: "Spectrier", types: ["Ghost"] },
+              { number: 1043, name: "Calyrex", types: ["Psychic", "Grass"] },
+              {
+                number: 1044,
+                name: "Calyrex-Ice-Rider",
+                types: ["Psychic", "Ice"],
+              },
+              {
+                number: 1045,
+                name: "Calyrex-Shadow-Rider",
+                types: ["Psychic", "Ghost"],
+              },
+              { number: 1046, name: "Regieleki", types: ["Electric"] },
+              { number: 1047, name: "Regidrago", types: ["Dragon"] },
+              { number: 1048, name: "Glastrier", types: ["Ice"] },
+              { number: 1049, name: "Spectrier", types: ["Ghost"] },
+              { number: 1050, name: "Calyrex", types: ["Psychic", "Grass"] },
+              {
+                number: 1051,
+                name: "Auburn",
+                types: ["Normal"],
+                abilities: ["Run Away"],
+              },
+              {
+                number: 1052,
+                name: "Aurorai",
+                types: ["Normal", "Psychic"],
+                abilities: ["Trace"],
+              },
+              {
+                number: 1053,
+                name: "Kitsunoh",
+                types: ["Steel", "Ghost"],
+                abilities: ["Frisk"],
+              },
+              {
+                number: 1054,
+                name: "Azumao",
+                types: ["Normal", "Flying"],
+                abilities: ["Big Pecks"],
+              },
+              {
+                number: 1055,
+                name: "Beeble",
+                types: ["Bug"],
+                abilities: ["Hyper Cutter"],
+              },
+              {
+                number: 1056,
+                name: "Ichneumon",
+                types: ["Bug", "Ground"],
+                abilities: ["Arena Trap"],
+              },
+              {
+                number: 1057,
+                name: "Ratsy",
+                types: ["Dark"],
+                abilities: ["Run Away"],
+              },
+              {
+                number: 1058,
+                name: "Raffiti",
+                types: ["Normal", "Flying"],
+                abilities: ["Keen Eye"],
+              },
+              {
+                number: 1059,
+                name: "Coltergeist",
+                types: ["Ghost"],
+                abilities: ["Levitate"],
+              },
+              {
+                number: 1060,
+                name: "Crystaquil",
+                types: ["Water", "Ice"],
+                abilities: ["Torrent"],
+              },
+              {
+                number: 1061,
+                name: "Cryogon",
+                types: ["Ice"],
+                abilities: ["Ice Body"],
+              },
+              {
+                number: 1062,
+                name: "Shibalbat",
+                types: ["Poison", "Flying"],
+                abilities: ["Inner Focus"],
+              },
+              {
+                number: 1063,
+                name: "Droopup",
+                types: ["Normal"],
+                abilities: ["Run Away"],
+              },
+              {
+                number: 1064,
+                name: "Dowster",
+                types: ["Normal"],
+                abilities: ["Limber"],
+              },
+              {
+                number: 1065,
+                name: "Urcane",
+                types: ["Fire", "Electric"],
+                abilities: ["Levitate"],
+              },
+              {
+                number: 1066,
+                name: "Draklith",
+                types: ["Rock", "Dragon"],
+                abilities: ["Levitate"],
+              },
+              {
+                number: 1067,
+                name: "Electzal",
+                types: ["Electric"],
+                abilities: ["Static"],
+              },
+              {
+                number: 1068,
+                name: "Eevee",
+                types: ["Normal"],
+                abilities: ["Run Away"],
+              },
+              {
+                number: 1069,
+                name: "Vaporeon",
+                types: ["Water"],
+                abilities: ["Water Absorb"],
+              },
+              {
+                number: 1070,
+                name: "Jolteon",
+                types: ["Electric"],
+                abilities: ["Volt Absorb"],
+              },
+              {
+                number: 1071,
+                name: "Flareon",
+                types: ["Fire"],
+                abilities: ["Flash Fire"],
+              },
+              {
+                number: 1072,
+                name: "Espeon",
+                types: ["Psychic"],
+                abilities: ["Synchronize"],
+              },
+              {
+                number: 1073,
+                name: "Umbreon",
+                types: ["Dark"],
+                abilities: ["Synchronize"],
+              },
+              {
+                number: 1074,
+                name: "Leafeon",
+                types: ["Grass"],
+                abilities: ["Leaf Guard"],
+              },
+              {
+                number: 1075,
+                name: "Glaceon",
+                types: ["Ice"],
+                abilities: ["Snow Cloak"],
+              },
+              {
+                number: 1076,
+                name: "Sylveon",
+                types: ["Fairy"],
+                abilities: ["Cute Charm"],
+              },
+              {
+                number: 1077,
+                name: "Ferneceon",
+                types: ["Normal", "Fire"],
+                abilities: ["Run Away"],
+              },
+              {
+                number: 1078,
+                name: "Jolteon",
+                types: ["Normal", "Electric"],
+                abilities: ["Run Away"],
+              },
+              {
+                number: 1079,
+                name: "Vaporeon",
+                types: ["Normal", "Water"],
+                abilities: ["Run Away"],
+              },
+              {
+                number: 1080,
+                name: "Snuffant",
+                types: ["Normal"],
+                abilities: ["Oblivious"],
+              },
+              {
+                number: 1081,
+                name: "Brachiodon",
+                types: ["Normal"],
+                abilities: ["Oblivious"],
+              },
+              {
+                number: 1082,
+                name: "Buzzeed",
+                types: ["Bug", "Flying"],
+                abilities: ["Swarm"],
+              },
+              {
+                number: 1083,
+                name: "Dracofly",
+                types: ["Bug", "Dragon"],
+                abilities: ["Swarm"],
+              },
+              {
+                number: 1084,
+                name: "Feeblefly",
+                types: ["Bug", "Flying"],
+                abilities: ["Shield Dust"],
+              },
+              {
+                number: 1085,
+                name: "Flameboyan",
+                types: ["Fire"],
+                abilities: ["Flame Body"],
+              },
+              {
+                number: 1086,
+                name: "Flameboyan-Armed",
+                types: ["Fire", "Fighting"],
+                abilities: ["Guts"],
+              },
+              {
+                number: 1087,
+                name: "Rashoon",
+                types: ["Psychic"],
+                abilities: ["Synchronize"],
+              },
+              {
+                number: 1088,
+                name: "Fantasmare",
+                types: ["Ghost"],
+                abilities: ["Levitate"],
+              },
+              {
+                number: 1089,
+                name: "Goryannye",
+                types: ["Ghost", "Ground"],
+                abilities: ["Levitate"],
+              },
+              {
+                number: 1090,
+                name: "Foxy",
+                types: ["Dark", "Fairy"],
+                abilities: ["Run Away"],
+              },
+              {
+                number: 1091,
+                name: "Ferretress",
+                types: ["Dark", "Fairy"],
+                abilities: ["Run Away"],
+              },
+              {
+                number: 1092,
+                name: "Hedgel",
+                types: ["Bug"],
+                abilities: ["Shield Dust"],
+              },
+              {
+                number: 1093,
+                name: "Hedgel-Brown",
+                types: ["Bug", "Ground"],
+                abilities: ["Shield Dust"],
+              },
+              {
+                number: 1094,
+                name: "Hedgel-Scarf",
+                types: ["Bug", "Psychic"],
+                abilities: ["Shield Dust"],
+              },
+              {
+                number: 1095,
+                name: "Panthee",
+                types: ["Normal"],
+                abilities: ["Guts"],
+              },
+              {
+                number: 1096,
+                name: "Oceloh",
+                types: ["Normal"],
+                abilities: ["Guts"],
+              },
+              {
+                number: 1097,
+                name: "Leopardon",
+                types: ["Normal"],
+                abilities: ["Guts"],
+              },
+              {
+                number: 1098,
+                name: "Pouncien",
+                types: ["Normal"],
+                abilities: ["Guts"],
+              },
+              {
+                number: 1099,
+                name: "Yewheat",
+                types: ["Grass", "Fire"],
+                abilities: ["Flash Fire"],
+              },
+              {
+                number: 1100,
+                name: "Coalahla",
+                types: ["Grass", "Fire"],
+                abilities: ["Flash Fire"],
+              },
             ],
 
             effectivenessData: [
@@ -1362,16 +2500,33 @@
               this.pokeLawan.splice(index, 1);
             }
           },
+
           removePokemon(pokemon) {
             // this.selectedPokemonNumbers.push(pokemon.number); // Menambahkan nomor Pokemon ke selectedPokemonNumbers
             this.pokeAnda.push(pokemon);
             this.namaPoke = "";
+
+            this.$nextTick(() => {
+              this.$refs.inputElement1.focus();
+            });
+          },
+          removePokemon2(pokemon) {
+            // this.selectedPokemonNumbers.push(pokemon.number); // Menambahkan nomor Pokemon ke selectedPokemonNumbers
+
+            this.pokeLawan.push(pokemon);
+            this.namaPoke = "";
+            this.$nextTick(() => {
+              this.$refs.inputElement2.focus();
+            });
           },
           removePokemon1(pokemon) {
             // this.selectedPokemonNumbers.push(pokemon.number); // Menambahkan nomor Pokemon ke selectedPokemonNumbers
 
             this.pokeLawan.push(pokemon);
             this.namaPoke = "";
+            this.$nextTick(() => {
+              this.$refs.inputElement.focus();
+            });
           },
           hapusPilih() {
             // this.pokeDipilih = [];
@@ -1395,6 +2550,15 @@
           }
           this.queryUser();
           this.GetDataTasks();
+        },
+        watch: {
+          showInput(value) {
+            if (value) {
+              this.$nextTick(() => {
+                this.$refs.inputElement.focus();
+              });
+            }
+          },
         },
       });
     </script>
